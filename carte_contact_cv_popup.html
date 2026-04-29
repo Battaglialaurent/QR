@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Laurent Battaglia — Carte de Contact</title>
   <meta name="description" content="Laurent Battaglia — Étudiant BTS ATI, modélisation 3D, ingénierie industrielle. Le Havre." />
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Laurent Battaglia" />
   <meta property="og:description" content="BTS ATI · Aéronautique · Ingénierie Industrielle" />
   <meta property="og:type" content="profile" />
@@ -31,15 +29,15 @@
     }
 
     html, body {
-      height: 100%;
+      min-height: 100vh;
       background: var(--bg);
       color: var(--ivory);
       font-family: 'DM Mono', monospace;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
       overflow-x: hidden;
+      padding: 2rem 0;
     }
 
     /* Grain overlay */
@@ -53,6 +51,7 @@
       opacity: 0.4;
     }
 
+    /* ── CARD ── */
     .card {
       width: min(480px, 94vw);
       background: var(--surface);
@@ -70,13 +69,27 @@
     .card::before, .card::after {
       content: '';
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 16px; height: 16px;
       border-color: var(--gold);
       border-style: solid;
     }
     .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
     .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    /* Scan line */
+    @keyframes scan {
+      from { top: 0; }
+      to   { top: 100%; }
+    }
+    .scanline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(transparent, rgba(200,169,110,0.06), transparent);
+      animation: scan 4s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
 
     /* Top bar */
     .bar {
@@ -133,7 +146,6 @@
     }
     .role .sep { color: var(--border); margin: 0 8px; }
 
-    /* Status badge */
     .status {
       display: inline-flex;
       align-items: center;
@@ -158,7 +170,7 @@
       50%       { opacity: 0.5; transform: scale(0.8); }
     }
 
-    /* Links grid */
+    /* Links */
     .links {
       padding: 20px 28px;
       display: flex;
@@ -187,13 +199,13 @@
       transform: scaleY(0);
       transition: transform 0.2s ease;
     }
-    .link-item:hover {
-      background: rgba(200, 169, 110, 0.05);
-      border-color: var(--border);
-    }
+    .link-item:hover { background: rgba(200,169,110,0.05); border-color: var(--border); }
     .link-item:hover::before { transform: scaleY(1); }
     .link-item:hover .link-label { color: var(--gold); }
     .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
+
+    /* Non-clickable link-items (email/tel) */
+    .link-item.static { cursor: default; }
 
     .link-icon {
       width: 32px; height: 32px;
@@ -229,7 +241,7 @@
       transition: all 0.2s ease;
     }
 
-    /* Copy button (email/tel) */
+    /* Copy button */
     .copy-btn {
       background: none;
       border: 1px solid var(--border);
@@ -246,12 +258,7 @@
     .copy-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
     .copy-btn.copied { border-color: var(--green); color: var(--green); }
 
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0 28px;
-    }
+    /* Divider label */
     .divider-label {
       text-align: center;
       margin: 0 28px;
@@ -263,47 +270,268 @@
       border-bottom: 1px solid var(--border);
     }
 
+    /* CV button (highlighted) */
+    .cv-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      color: var(--ivory);
+      border: 1px solid var(--gold-dim);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(200, 169, 110, 0.04);
+      width: 100%;
+      text-align: left;
+      font-family: 'DM Mono', monospace;
+      margin-top: 4px;
+    }
+    .cv-btn::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--gold);
+    }
+    .cv-btn:hover { background: rgba(200,169,110,0.1); border-color: var(--gold); }
+    .cv-btn:hover .cv-btn-label { color: var(--gold); }
+    .cv-btn-label {
+      font-size: 13px;
+      color: rgba(200,169,110,0.85);
+      transition: color 0.2s;
+    }
+
     /* Footer */
     .footer {
       padding: 14px 28px;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .footer-loc {
+    .footer-loc { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+    .footer-loc span { color: var(--gold-dim); }
+    .footer-sig { font-size: 9px; letter-spacing: 0.15em; color: var(--border); text-transform: uppercase; }
+
+    /* ── MODAL ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .overlay.open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--gold-dim);
+      width: min(560px, 96vw);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .modal::before, .modal::after {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      border-color: var(--gold);
+      border-style: solid;
+    }
+    .modal::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .modal::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    .modal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(200,169,110,0.04);
+      flex-shrink: 0;
+    }
+    .modal-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .modal-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 24px; height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    .modal-preview {
+      flex: 1;
+      overflow: hidden;
+      background: #1a1a18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 340px;
+      position: relative;
+    }
+
+    /* Placeholder CV sketch */
+    .cv-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 2rem;
+    }
+    .cv-page {
+      width: 180px; height: 254px;
+      background: #fff;
+      border: 1px solid #ddd;
+      position: relative;
+      display: flex; flex-direction: column;
+      padding: 18px 16px;
+      gap: 8px;
+    }
+    .cv-page::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; right: -4px;
+      width: 100%; height: 100%;
+      background: #e0e0de;
+      z-index: -1;
+      border: 1px solid #ccc;
+    }
+    .cv-line { height: 6px; background: #e8e0cc; border-radius: 2px; }
+    .cv-line.dark { background: #c8a96e; width: 60%; }
+    .cv-line.mid  { background: #d4cdb8; width: 80%; }
+    .cv-line.short  { width: 45%; }
+    .cv-line.xshort { width: 30%; }
+    .cv-section { height: 3px; background: rgba(200,169,110,0.4); margin: 4px 0; }
+
+    .cv-placeholder-text {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .upload-hint {
       font-size: 10px;
       color: var(--muted);
       letter-spacing: 0.1em;
+      text-align: center;
+      margin-top: 6px;
     }
-    .footer-loc span { color: var(--gold-dim); }
-    .footer-sig {
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      color: var(--border);
+    .upload-label {
+      display: inline-block;
+      background: none;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      padding: 6px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-label:hover { background: rgba(200,169,110,0.08); border-color: var(--gold); }
+
+    .img-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-height: 420px;
+      display: none;
     }
 
-    /* Scan line animation */
-    @keyframes scan {
-      from { top: 0; }
-      to   { top: 100%; }
+    .modal-actions {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
     }
-    .scanline {
-      position: absolute;
-      left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(transparent, rgba(200,169,110,0.06), transparent);
-      animation: scan 4s linear infinite;
+
+    .btn-dl {
+      background: var(--gold);
+      border: none;
+      color: #0a0a08;
+      padding: 8px 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-dl:hover { background: #ddbf86; }
+    .btn-dl:disabled, .btn-dl.disabled {
+      background: var(--border);
+      color: var(--muted);
+      cursor: not-allowed;
       pointer-events: none;
+    }
+
+    .btn-cancel {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    /* Keyboard hint */
+    .kbd-hint {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--border);
+      text-transform: uppercase;
+      padding: 0 20px 10px;
+      text-align: right;
     }
   </style>
 </head>
 <body>
 
+<!-- ── MAIN CARD ── -->
 <div class="card">
   <div class="scanline"></div>
 
-  <!-- Top bar -->
   <div class="bar">
     <div class="dot active"></div>
     <div class="dot"></div>
@@ -311,9 +539,8 @@
     <span class="bar-label">contact.vcard — Core Interface</span>
   </div>
 
-  <!-- Header -->
   <div class="header">
-    <div class="prefix">&gt; <span>ID_CARD</span> · Initialisation...</div>
+    <div class="prefix">&gt; <span>ID_CARD</span> · BTS ATI · Initialisé</div>
     <div class="name">Laurent<br>Battaglia</div>
     <div class="role">
       BTS ATI
@@ -328,11 +555,10 @@
     </div>
   </div>
 
-  <!-- Links -->
   <div class="links">
 
     <!-- Portfolio -->
-    <a href="https://battaglialaurent.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="link-item">
+    <a href="https://battaglialaurent.github.io" target="_blank" rel="noopener noreferrer" class="link-item">
       <div class="link-icon">⬡</div>
       <div class="link-content">
         <div class="link-type">Portfolio</div>
@@ -344,7 +570,7 @@
     <div class="divider-label">Réseaux</div>
 
     <!-- LinkedIn -->
-    <a href="https://www.linkedin.com/in/laurent-battaglia-havre/" target="_blank" rel="noopener noreferrer" class="link-item">
+    <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369" target="_blank" rel="noopener noreferrer" class="link-item">
       <div class="link-icon">in</div>
       <div class="link-content">
         <div class="link-type">LinkedIn</div>
@@ -352,73 +578,155 @@
       </div>
       <span class="link-arrow">↗</span>
     </a>
-
-    <!-- GitHub -->
-    <a href="https://github.com/battaglialaurent" target="_blank" rel="noopener noreferrer" class="link-item">
-      <div class="link-icon">⌥</div>
-      <div class="link-content">
-        <div class="link-type">GitHub</div>
-        <div class="link-label">battaglialaurent</div>
-      </div>
-      <span class="link-arrow">↗</span>
-    </a>
-
-    <div class="divider-label">Contact Direct</div>
-
     <!-- Email -->
-    <div class="link-item" style="cursor:default;">
+    <div class="link-item static">
       <div class="link-icon">@</div>
       <div class="link-content">
         <div class="link-type">Email</div>
-        <!-- REMPLACE PAR TON EMAIL -->
-        <div class="link-label" id="email-val">ton.email@example.com</div>
+        <div class="link-label" id="email-val">battaglialaurent11@gmail.com</div>
       </div>
       <button class="copy-btn" onclick="copyText('email-val', this)">Copier</button>
     </div>
 
     <!-- Téléphone -->
-    <div class="link-item" style="cursor:default;">
+    <div class="link-item static">
       <div class="link-icon">#</div>
       <div class="link-content">
         <div class="link-type">Téléphone</div>
-        <!-- REMPLACE PAR TON NUMÉRO -->
-        <div class="link-label" id="tel-val">+33 6 XX XX XX XX</div>
+        <div class="link-label" id="tel-val">+33 6 21 84 16 13</div>
       </div>
       <button class="copy-btn" onclick="copyText('tel-val', this)">Copier</button>
     </div>
 
+    <div class="divider-label">Curriculum Vitae</div>
+
+    <!-- CV Button -->
+    <button class="cv-btn" onclick="openCV()">
+      <div class="link-icon" style="font-size:16px;">▤</div>
+      <div class="link-content">
+        <div class="link-type">Document</div>
+        <div class="cv-btn-label">Voir mon CV</div>
+      </div>
+      <span style="color:var(--gold);font-size:12px;">↓</span>
+    </button>
+
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     <div class="footer-loc"><span>⌖</span> Le Havre, Normandie</div>
-    <div class="footer-sig">Core v1.0</div>
+    <div class="footer-sig">Core v1.1</div>
+  </div>
+</div>
+
+<!-- ── CV MODAL ── -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-bar">
+      <span class="modal-title">&gt; CV_PREVIEW · Laurent Battaglia</span>
+      <button class="modal-close" onclick="closeCV()" title="Fermer (Échap)">✕</button>
+    </div>
+
+    <div class="modal-preview" id="preview-area">
+      <!-- Placeholder sketch -->
+      <div class="cv-placeholder" id="cv-placeholder">
+        <div class="cv-page">
+          <div class="cv-line dark"></div>
+          <div class="cv-line xshort" style="background:#aaa;margin-bottom:4px;"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line xshort"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line xshort"></div>
+        </div>
+        <div>
+          <p class="cv-placeholder-text">Chargez l'aperçu de votre CV</p>
+          <p class="upload-hint">PNG · JPG acceptés</p>
+        </div>
+        <label>
+          <span class="upload-label">+ Charger une image</span>
+          <input type="file" accept="image/*" style="display:none;" onchange="loadImage(event)">
+        </label>
+      </div>
+
+      <!-- Image preview (shown after upload) -->
+      <img class="img-preview" id="cv-img" alt="Aperçu CV Laurent Battaglia" />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCV()">Fermer</button>
+      <a class="btn-dl disabled" id="dl-link" href="#" download="CV_Laurent_Battaglia.jpg">
+        ↓ Télécharger le CV
+      </a>
+    </div>
+    <div class="kbd-hint">Appuyez sur Échap pour fermer</div>
   </div>
 </div>
 
 <script>
+  /* ── CV MODAL ── */
+  function openCV() {
+    document.getElementById('overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCV() {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('overlay')) closeCV();
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCV();
+  });
+
+  /* ── IMAGE UPLOAD ── */
+  function loadImage(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const img = document.getElementById('cv-img');
+    img.src = url;
+    img.style.display = 'block';
+    document.getElementById('cv-placeholder').style.display = 'none';
+    const dl = document.getElementById('dl-link');
+    const ext = file.name.split('.').pop() || 'jpg';
+    dl.href = url;
+    dl.download = 'CV_Laurent_Battaglia.' + ext;
+    dl.classList.remove('disabled');
+  }
+
+  /* ── COPY TEXT ── */
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
-    navigator.clipboard.writeText(text).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = 'Copié ✓';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = orig;
-        btn.classList.remove('copied');
-      }, 2000);
-    }).catch(() => {
-      // Fallback
+    navigator.clipboard.writeText(text).then(function() {
+      showCopied(btn);
+    }).catch(function() {
+      // Fallback for older browsers
       const ta = document.createElement('textarea');
       ta.value = text;
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      btn.textContent = 'Copié ✓';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+      showCopied(btn);
     });
+  }
+  function showCopied(btn) {
+    const orig = btn.textContent;
+    btn.textContent = 'Copié ✓';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
   }
 </script>
 
