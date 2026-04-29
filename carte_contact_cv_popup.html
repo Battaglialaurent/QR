@@ -1,0 +1,260 @@
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0a08;--surface:#111110;--border:#2a2a26;
+  --gold:#c8a96e;--gold-dim:#8a7048;--ivory:#e8e0cc;
+  --muted:#6b6860;--green:#4a8c5c;--green-dim:#2d5438;
+}
+body{background:var(--bg);color:var(--ivory);font-family:'DM Mono',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem 0;}
+.card{width:min(480px,94vw);background:var(--surface);border:1px solid var(--border);position:relative;animation:fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.card::before,.card::after{content:'';position:absolute;width:16px;height:16px;border-color:var(--gold);border-style:solid;}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(200,169,110,0.04);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);}
+.dot.active{background:var(--gold);box-shadow:0 0 6px var(--gold-dim);}
+.bar-label{margin-left:auto;font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;}
+.header{padding:32px 28px 24px;border-bottom:1px solid var(--border);}
+.prefix{font-size:10px;letter-spacing:0.2em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:10px;}
+.prefix span{color:var(--gold);}
+.name{font-family:'Syne',sans-serif;font-size:clamp(26px,7vw,34px);font-weight:800;color:var(--ivory);line-height:1;letter-spacing:-0.02em;margin-bottom:8px;}
+.role{font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;}
+.role .sep{color:var(--border);margin:0 8px;}
+.status{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:5px 10px;background:rgba(74,140,92,0.1);border:1px solid var(--green-dim);font-size:10px;letter-spacing:0.12em;color:var(--green);text-transform:uppercase;}
+.pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.links{padding:20px 28px;display:flex;flex-direction:column;gap:2px;}
+.link-item{display:flex;align-items:center;gap:14px;padding:12px 14px;text-decoration:none;color:var(--ivory);border:1px solid transparent;transition:all 0.2s ease;position:relative;overflow:hidden;cursor:pointer;background:none;width:100%;text-align:left;font-family:'DM Mono',monospace;}
+.link-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transition:transform 0.2s ease;}
+.link-item:hover{background:rgba(200,169,110,0.05);border-color:var(--border);}
+.link-item:hover::before{transform:scaleY(1);}
+.link-item:hover .link-label{color:var(--gold);}
+.link-item:hover .link-arrow{opacity:1;transform:translateX(0);}
+.link-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:1px solid var(--border);flex-shrink:0;font-size:14px;}
+.link-content{flex:1;min-width:0;}
+.link-type{font-size:9px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:2px;}
+.link-label{font-size:13px;color:var(--ivory);transition:color 0.2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.link-arrow{color:var(--gold);font-size:12px;opacity:0;transform:translateX(-4px);transition:all 0.2s ease;}
+.copy-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.2s;flex-shrink:0;}
+.copy-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+.copy-btn.copied{border-color:var(--green);color:var(--green);}
+.divider-label{text-align:center;margin:0 28px;padding:6px 0;font-size:9px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);}
+.footer{padding:14px 28px;display:flex;justify-content:space-between;align-items:center;}
+.footer-loc{font-size:10px;color:var(--muted);letter-spacing:0.1em;}
+.footer-loc span{color:var(--gold-dim);}
+.footer-sig{font-size:9px;letter-spacing:0.15em;color:var(--border);text-transform:uppercase;}
+@keyframes scan{from{top:0}to{top:100%}}
+.scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(transparent,rgba(200,169,110,0.06),transparent);animation:scan 4s linear infinite;pointer-events:none;}
+
+/* CV Button spécial */
+.cv-btn{display:flex;align-items:center;gap:14px;padding:12px 14px;color:var(--ivory);border:1px solid var(--gold-dim);transition:all 0.2s ease;position:relative;overflow:hidden;cursor:pointer;background:rgba(200,169,110,0.04);width:100%;text-align:left;font-family:'DM Mono',monospace;margin-top:4px;}
+.cv-btn::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(1);}
+.cv-btn:hover{background:rgba(200,169,110,0.1);border-color:var(--gold);}
+.cv-btn:hover .link-label{color:var(--gold);}
+.cv-btn .link-label{color:rgba(200,169,110,0.85);}
+
+/* Overlay popup */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;animation:fadeIn 0.2s ease;}
+.overlay.open{display:flex;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border:1px solid var(--gold-dim);width:min(560px,96vw);max-height:90vh;display:flex;flex-direction:column;position:relative;animation:slideUp 0.3s cubic-bezier(0.16,1,0.3,1);}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal::before,.modal::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--gold);border-style:solid;}
+.modal::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.modal::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+.modal-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:rgba(200,169,110,0.04);}
+.modal-title{font-size:10px;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;}
+.modal-close{background:none;border:1px solid var(--border);color:var(--muted);width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;transition:all 0.2s;flex-shrink:0;}
+.modal-close:hover{border-color:var(--gold-dim);color:var(--gold);}
+.modal-preview{flex:1;overflow:hidden;background:#1a1a18;display:flex;align-items:center;justify-content:center;min-height:340px;position:relative;}
+.cv-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:2rem;}
+.cv-page{width:180px;height:254px;background:#fff;border:1px solid #ddd;position:relative;display:flex;flex-direction:column;padding:18px 16px;gap:8px;}
+.cv-page::after{content:'';position:absolute;bottom:-4px;right:-4px;width:100%;height:100%;background:#e0e0de;z-index:-1;border:1px solid #ccc;}
+.cv-line{height:6px;background:#e8e0cc;border-radius:2px;}
+.cv-line.dark{background:#c8a96e;width:60%;}
+.cv-line.mid{background:#d4cdb8;width:80%;}
+.cv-line.short{width:45%;}
+.cv-line.xshort{width:30%;}
+.cv-section{height:3px;background:rgba(200,169,110,0.4);margin:4px 0;}
+.cv-placeholder-text{font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;text-align:center;}
+.modal-actions{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+.btn-dl{background:var(--gold);border:none;color:#0a0a08;padding:8px 20px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;cursor:pointer;text-transform:uppercase;font-weight:500;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-dl:hover{background:#ddbf86;}
+.btn-cancel{background:none;border:1px solid var(--border);color:var(--muted);padding:8px 16px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;cursor:pointer;text-transform:uppercase;transition:all 0.2s;}
+.btn-cancel:hover{border-color:var(--gold-dim);color:var(--gold);}
+.img-preview{width:100%;height:100%;object-fit:contain;max-height:360px;display:none;}
+.upload-hint{font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-top:8px;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:2rem 0;">
+
+<div class="card">
+  <div class="scanline"></div>
+  <div class="bar">
+    <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    <span class="bar-label">contact.vcard —</span>
+  </div>
+  <div class="header">
+    <div class="prefix">&gt; <span>ID_CARD</span> · BTS ATI...</div>
+    <div class="name">Laurent<br>Battaglia</div>
+    <div class="role">BTS ATI<span class="sep">//</span>Aéronautique<span class="sep">//</span>Ingénierie Industrielle</div>
+    <div class="status"><div class="pulse"></div>Disponible · Stage Mai–Juil 2026</div>
+  </div>
+  <div class="links">
+    <a href="https://battaglialaurent.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="link-item" onclick="openCV(event)">
+      <div class="link-icon">⬡</div>
+      <div class="link-content">
+        <div class="link-type">Portfolio</div>
+        <div class="link-label">battaglialaurent.github.io/Portfolio</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <div class="divider-label">Réseaux</div>
+
+    <a href="https://www.linkedin.com/in/laurent-battaglia-havre/" target="_blank" rel="noopener noreferrer" class="link-item">
+      <div class="link-icon">in</div>
+      <div class="link-content">
+        <div class="link-type">LinkedIn</div>
+        <div class="link-label">laurent-battaglia-havre</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <div class="divider-label">Contact Direct</div>
+
+    <div class="link-item" style="cursor:default;">
+      <div class="link-icon">@</div>
+      <div class="link-content">
+        <div class="link-type">Email</div>
+        <div class="link-label" id="email-val">battaglialaurent11@gmail.com</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('email-val',this)">Copier</button>
+    </div>
+
+    <div class="link-item" style="cursor:default;">
+      <div class="link-icon">#</div>
+      <div class="link-content">
+        <div class="link-type">Téléphone</div>
+        <div class="link-label" id="tel-val">+33 6 21 84 16 13</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('tel-val',this)">Copier</button>
+    </div>
+
+    <div class="divider-label">Curriculum Vitae</div>
+
+    <button class="cv-btn" onclick="openCV()">
+      <div class="link-icon" style="font-size:16px;">▤</div>
+      <div class="link-content">
+        <div class="link-type">Document</div>
+        <div class="link-label">Voir mon CV</div>
+      </div>
+      <span class="link-arrow" style="opacity:1;transform:none;color:var(--gold);">↓</span>
+    </button>
+  </div>
+  <div class="footer">
+    <div class="footer-loc"><span>⌖</span> Le Havre, Normandie</div>
+    <div class="footer-sig">Core v1.1</div>
+  </div>
+</div>
+
+</div>
+
+<!-- Popup CV -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-bar">
+      <span class="modal-title">&gt; CV_PREVIEW · Laurent Battaglia</span>
+      <button class="modal-close" onclick="closeCV()">✕</button>
+    </div>
+    <div class="modal-preview" id="preview-area">
+      <!-- Aperçu visuel si pas d'image chargée -->
+      <div class="cv-placeholder" id="cv-placeholder">
+        <div class="cv-page">
+          <div class="cv-line dark"></div>
+          <div class="cv-line xshort" style="background:#aaa;margin-bottom:4px;"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line xshort"></div>
+          <div class="cv-section"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line short"></div>
+          <div class="cv-line mid"></div>
+          <div class="cv-line xshort"></div>
+        </div>
+        <div>
+          <p class="cv-placeholder-text">Ajouter l'image de votre CV ci-dessous</p>
+          <p class="upload-hint" style="text-align:center;margin-top:6px;">PNG · JPG · PDF acceptés</p>
+        </div>
+        <label style="cursor:pointer;">
+          <span style="display:inline-block;background:none;border:1px solid var(--gold-dim);color:var(--gold);padding:6px 16px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;">+ Charger une image</span>
+          <input type="file" accept="image/*" style="display:none;" onchange="loadImage(event)">
+        </label>
+      </div>
+      <img class="img-preview" id="cv-img" alt="Aperçu CV Laurent Battaglia"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCV()">Fermer</button>
+      <a class="btn-dl" id="dl-link" href="#" download="CV_Laurent_Battaglia.pdf">
+        ↓ Télécharger le CV
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function openCV(e){
+  if(e && e.target.closest('a')){
+    var href = e.target.closest('a').getAttribute('href');
+    if(href && !href.startsWith('#')){
+      e.preventDefault();
+    }
+  }
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCV(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('overlay')) closeCV();
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape') closeCV();});
+
+function loadImage(e){
+  var file=e.target.files[0];
+  if(!file) return;
+  var url=URL.createObjectURL(file);
+  var img=document.getElementById('cv-img');
+  img.src=url;
+  img.style.display='block';
+  document.getElementById('cv-placeholder').style.display='none';
+  var dl=document.getElementById('dl-link');
+  dl.href=url;
+  dl.download='CV_Laurent_Battaglia.'+(file.name.split('.').pop()||'jpg');
+}
+
+function copyText(id,btn){
+  var text=document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(function(){
+    var orig=btn.textContent;
+    btn.textContent='Copié ✓';btn.classList.add('copied');
+    setTimeout(function(){btn.textContent=orig;btn.classList.remove('copied');},2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=text;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    btn.textContent='Copié ✓';btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copier';btn.classList.remove('copied');},2000);
+  });
+}
+</script>
