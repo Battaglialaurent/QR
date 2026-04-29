@@ -2,8 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Laurent Battaglia — Carte de Contact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a08" />
+  <title>Laurent Battaglia — Contact</title>
   <meta name="description" content="Laurent Battaglia — Étudiant BTS ATI, modélisation 3D, ingénierie industrielle. Le Havre." />
   <meta property="og:title" content="Laurent Battaglia" />
   <meta property="og:description" content="BTS ATI · Aéronautique · Ingénierie Industrielle" />
@@ -11,7 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,234 +20,238 @@
     :root {
       --bg:        #0a0a08;
       --surface:   #111110;
-      --border:    #2a2a26;
+      --surface2:  #161614;
+      --border:    #252522;
+      --border2:   #2e2e2a;
       --gold:      #c8a96e;
-      --gold-dim:  #8a7048;
+      --gold-dim:  #7a6038;
+      --gold-glow: rgba(200,169,110,0.12);
       --ivory:     #e8e0cc;
-      --muted:     #6b6860;
+      --ivory-dim: #a09880;
+      --muted:     #5a5850;
       --green:     #4a8c5c;
-      --green-dim: #2d5438;
+      --green-dim: #1e3d28;
+      --green-glow:rgba(74,140,92,0.15);
     }
 
-    html, body {
-      min-height: 100vh;
+    html {
       background: var(--bg);
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
       color: var(--ivory);
       font-family: 'DM Mono', monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow-x: hidden;
-      padding: 2rem 0;
+      padding-bottom: env(safe-area-inset-bottom, 16px);
     }
 
-    /* Grain overlay */
-    body::before {
+    /* Grain */
+    body::after {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
       pointer-events: none;
-      z-index: 100;
-      opacity: 0.4;
+      z-index: 999;
+      opacity: 0.5;
     }
 
-    /* ── CARD ── */
-    .card {
-      width: min(480px, 94vw);
+    /* ─── LAYOUT ─── */
+    .page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 18px 14px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ─── TOP BAR ─── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 2px 14px;
+      opacity: 0;
+      animation: rise 0.5s 0.05s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border2); }
+    .dot.on { background: var(--gold); box-shadow: 0 0 5px var(--gold-dim); }
+    .topbar-label {
+      margin-left: auto;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ─── HEADER CARD ─── */
+    .header-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border2);
       position: relative;
-      animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      overflow: hidden;
+      opacity: 0;
+      animation: rise 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) forwards;
     }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Corner accents */
-    .card::before, .card::after {
+    .header-card::before, .header-card::after {
       content: '';
       position: absolute;
-      width: 16px; height: 16px;
+      width: 14px; height: 14px;
       border-color: var(--gold);
       border-style: solid;
+      z-index: 2;
     }
-    .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-    .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .header-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .header-card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-    /* Scan line */
-    @keyframes scan {
-      from { top: 0; }
-      to   { top: 100%; }
-    }
     .scanline {
       position: absolute;
-      left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(transparent, rgba(200,169,110,0.06), transparent);
-      animation: scan 4s linear infinite;
+      left: 0; right: 0; height: 80px;
+      background: linear-gradient(transparent, rgba(200,169,110,0.04), transparent);
+      animation: scan 5s linear infinite;
       pointer-events: none;
       z-index: 1;
     }
+    @keyframes scan { from { top: -80px; } to { top: 100%; } }
 
-    /* Top bar */
-    .bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(200, 169, 110, 0.04);
-    }
-    .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-    }
-    .dot.active { background: var(--gold); box-shadow: 0 0 6px var(--gold-dim); }
-    .bar-label {
-      margin-left: auto;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    /* Header */
-    .header {
-      padding: 32px 28px 24px;
-      border-bottom: 1px solid var(--border);
-    }
+    .header-inner { padding: 22px 18px 20px; position: relative; z-index: 2; }
     .prefix {
-      font-size: 10px;
-      letter-spacing: 0.2em;
+      font-size: 9px;
+      letter-spacing: 0.22em;
       color: var(--gold-dim);
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
-    .prefix span { color: var(--gold); }
+    .prefix em { color: var(--gold); font-style: normal; }
 
     .name {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(26px, 7vw, 34px);
+      font-size: clamp(30px, 10vw, 38px);
       font-weight: 800;
       color: var(--ivory);
-      line-height: 1;
+      line-height: 0.95;
       letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
+    .name span { display: block; }
+    .name span.gold { color: var(--gold); }
 
     .role {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-    .role .sep { color: var(--border); margin: 0 8px; }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 16px;
-      padding: 5px 10px;
-      background: rgba(74, 140, 92, 0.1);
-      border: 1px solid var(--green-dim);
       font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      line-height: 1.9;
+    }
+    .role strong { color: var(--ivory-dim); font-weight: 400; }
+
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 9px;
+      border: 1px solid;
+      font-size: 9px;
       letter-spacing: 0.12em;
-      color: var(--green);
       text-transform: uppercase;
     }
+    .badge-green { background: var(--green-glow); border-color: var(--green-dim); color: var(--green); }
+    .badge-gold  { background: var(--gold-glow);  border-color: var(--gold-dim);  color: var(--gold); }
     .pulse {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       background: var(--green);
       border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
+      animation: pulse 2.2s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(0.8); }
-    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
 
-    /* Links */
-    .links {
-      padding: 20px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .link-item {
+    /* ─── SECTION LABEL ─── */
+    .section-label {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 12px 14px;
+      gap: 10px;
+      padding: 16px 2px 8px;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      text-transform: uppercase;
+      opacity: 0;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ─── LINKS BLOCK ─── */
+    .links-block {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
       text-decoration: none;
       color: var(--ivory);
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
+      border-bottom: 1px solid var(--border);
       position: relative;
-      overflow: hidden;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .link-item::before {
+    .link-row:last-child { border-bottom: none; }
+    .link-row::before {
       content: '';
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 2px;
       background: var(--gold);
       transform: scaleY(0);
-      transition: transform 0.2s ease;
+      transition: transform 0.2s;
     }
-    .link-item:hover { background: rgba(200,169,110,0.05); border-color: var(--border); }
-    .link-item:hover::before { transform: scaleY(1); }
-    .link-item:hover .link-label { color: var(--gold); }
-    .link-item:hover .link-arrow { opacity: 1; transform: translateX(0); }
+    .link-row:active, .link-row:hover { background: rgba(200,169,110,0.04); }
+    .link-row:active::before, .link-row:hover::before { transform: scaleY(1); }
 
-    /* Non-clickable link-items (email/tel) */
-    .link-item.static { cursor: default; }
+    .link-row.static { cursor: default; }
+    .link-row.static:active { background: transparent; }
+    .link-row.static::before { display: none; }
 
     .link-icon {
-      width: 32px; height: 32px;
+      width: 36px; height: 36px;
       display: flex; align-items: center; justify-content: center;
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border2);
       flex-shrink: 0;
-      font-size: 14px;
+      font-size: 15px;
     }
-
-    .link-content { flex: 1; min-width: 0; }
+    .link-body { flex: 1; min-width: 0; }
     .link-type {
-      font-size: 9px;
-      letter-spacing: 0.18em;
+      font-size: 8px;
+      letter-spacing: 0.2em;
       color: var(--muted);
       text-transform: uppercase;
       margin-bottom: 2px;
     }
-    .link-label {
-      font-size: 13px;
+    .link-text {
+      font-size: 12px;
       color: var(--ivory);
-      transition: color 0.2s;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .link-arrow { color: var(--gold); font-size: 14px; flex-shrink: 0; opacity: 0.5; }
 
-    .link-arrow {
-      color: var(--gold);
-      font-size: 12px;
-      opacity: 0;
-      transform: translateX(-4px);
-      transition: all 0.2s ease;
-    }
-
-    /* Copy button */
     .copy-btn {
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border2);
       color: var(--muted);
-      padding: 4px 8px;
+      padding: 6px 10px;
       font-family: 'DM Mono', monospace;
       font-size: 9px;
       letter-spacing: 0.1em;
@@ -254,481 +259,423 @@
       text-transform: uppercase;
       transition: all 0.2s;
       flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
     }
-    .copy-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+    .copy-btn:active, .copy-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .copy-btn.ok { border-color: var(--green); color: var(--green); }
 
-    /* Divider label */
-    .divider-label {
-      text-align: center;
-      margin: 0 28px;
-      padding: 6px 0;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* CV button (highlighted) */
-    .cv-btn {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 14px;
-      color: var(--ivory);
-      border: 1px solid var(--gold-dim);
-      transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      background: rgba(200, 169, 110, 0.04);
-      width: 100%;
-      text-align: left;
-      font-family: 'DM Mono', monospace;
-      margin-top: 4px;
-    }
-    .cv-btn::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: var(--gold);
-    }
-    .cv-btn:hover { background: rgba(200,169,110,0.1); border-color: var(--gold); }
-    .cv-btn:hover .cv-btn-label { color: var(--gold); }
-    .cv-btn-label {
-      font-size: 13px;
-      color: rgba(200,169,110,0.85);
-      transition: color 0.2s;
-    }
-
-    /* Footer */
-    .footer {
-      padding: 14px 28px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer-loc { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
-    .footer-loc span { color: var(--gold-dim); }
-    .footer-sig { font-size: 9px; letter-spacing: 0.15em; color: var(--border); text-transform: uppercase; }
-
-    /* ── MODAL ── */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .overlay.open {
-      display: flex;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .modal {
+    /* ─── CV BLOCK ─── */
+    .cv-block {
       background: var(--surface);
-      border: 1px solid var(--gold-dim);
-      width: min(560px, 96vw);
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
+      border: 1px solid var(--border2);
+      overflow: hidden;
+      opacity: 0;
       position: relative;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .modal::before, .modal::after {
+    .cv-block::before, .cv-block::after {
       content: '';
       position: absolute;
-      width: 14px; height: 14px;
+      width: 12px; height: 12px;
       border-color: var(--gold);
       border-style: solid;
+      z-index: 2;
+      pointer-events: none;
     }
-    .modal::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-    .modal::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .cv-block::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .cv-block::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-    .modal-bar {
+    .cv-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
-      background: rgba(200,169,110,0.04);
-      flex-shrink: 0;
+      background: rgba(200,169,110,0.03);
     }
-    .modal-title {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-    .modal-close {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      width: 24px; height: 24px;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'DM Mono', monospace;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .modal-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .cv-topbar-label { font-size: 9px; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; }
+    .cv-topbar-sub   { font-size: 8px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
 
-    .modal-preview {
-      flex: 1;
-      overflow: hidden;
-      background: #1a1a18;
+    /* Display zone */
+    .cv-display {
+      position: relative;
+      background: #0d0d0b;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 340px;
-      position: relative;
+      min-height: 420px;
     }
 
-    /* Placeholder CV sketch */
-    .cv-placeholder {
+    /* Empty state */
+    .cv-empty {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 16px;
-      padding: 2rem;
+      gap: 20px;
+      padding: 30px 24px;
+      text-align: center;
     }
-    .cv-page {
-      width: 180px; height: 254px;
-      background: #fff;
-      border: 1px solid #ddd;
+    .cv-sketch {
+      width: 140px; height: 198px;
+      background: #1a1a18;
+      border: 1px solid var(--border2);
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
       position: relative;
-      display: flex; flex-direction: column;
-      padding: 18px 16px;
-      gap: 8px;
     }
-    .cv-page::after {
+    .cv-sketch::after {
       content: '';
       position: absolute;
-      bottom: -4px; right: -4px;
-      width: 100%; height: 100%;
-      background: #e0e0de;
-      z-index: -1;
-      border: 1px solid #ccc;
-    }
-    .cv-line { height: 6px; background: #e8e0cc; border-radius: 2px; }
-    .cv-line.dark { background: #c8a96e; width: 60%; }
-    .cv-line.mid  { background: #d4cdb8; width: 80%; }
-    .cv-line.short  { width: 45%; }
-    .cv-line.xshort { width: 30%; }
-    .cv-section { height: 3px; background: rgba(200,169,110,0.4); margin: 4px 0; }
-
-    .cv-placeholder-text {
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      text-transform: uppercase;
-      text-align: center;
-    }
-    .upload-hint {
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-align: center;
-      margin-top: 6px;
-    }
-    .upload-label {
-      display: inline-block;
-      background: none;
+      inset: 0;
       border: 1px solid var(--gold-dim);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .sk {
+      height: 5px;
+      background: var(--border2);
+      border-radius: 1px;
+      animation: shimmer 2.5s ease-in-out infinite;
+    }
+    .sk.h  { height: 6px; width: 62%; background: rgba(200,169,110,0.3); animation-delay: 0s; }
+    .sk.s  { height: 2px; background: rgba(200,169,110,0.2); margin: 2px 0; animation: none; }
+    .sk.w80{ width: 80%; animation-delay: 0.1s; }
+    .sk.w60{ width: 60%; animation-delay: 0.25s; }
+    .sk.w70{ width: 70%; animation-delay: 0.4s; }
+    .sk.w45{ width: 45%; animation-delay: 0.55s; }
+    .sk.w75{ width: 75%; animation-delay: 0.7s; }
+    .sk.w50{ width: 50%; animation-delay: 0.85s; }
+    .sk.w65{ width: 65%; animation-delay: 1.0s; }
+    @keyframes shimmer { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
+
+    .cv-empty-text {
+      font-size: 9px; letter-spacing: 0.16em; color: var(--muted);
+      text-transform: uppercase; line-height: 1.9;
+    }
+    .cv-empty-text strong { display: block; color: var(--ivory-dim); margin-bottom: 4px; font-weight: 400; font-size: 10px; }
+
+    .upload-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--gold-dim);
+      background: rgba(200,169,110,0.06);
       color: var(--gold);
-      padding: 6px 16px;
+      padding: 11px 22px;
       font-family: 'DM Mono', monospace;
       font-size: 10px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .upload-label:hover { background: rgba(200,169,110,0.08); border-color: var(--gold); }
+    .upload-label:active { background: rgba(200,169,110,0.14); }
 
-    .img-preview {
+    /* Loaded image */
+    .cv-image {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-      max-height: 420px;
       display: none;
+      object-fit: contain;
+      max-height: 680px;
     }
 
-    .modal-actions {
-      padding: 16px 20px;
+    /* ─── DOWNLOAD BAR ─── */
+    .dl-bar {
+      padding: 12px 14px;
       border-top: 1px solid var(--border);
       display: flex;
+      align-items: center;
       gap: 10px;
-      justify-content: flex-end;
-      flex-shrink: 0;
+      background: rgba(200,169,110,0.03);
     }
+    .dl-info { flex: 1; min-width: 0; }
+    .dl-name { font-size: 11px; color: var(--ivory-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dl-meta { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-top: 2px; }
 
     .btn-dl {
+      display: inline-flex; align-items: center; gap: 7px;
       background: var(--gold);
       border: none;
       color: #0a0a08;
-      padding: 8px 20px;
+      padding: 12px 18px;
       font-family: 'DM Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.12em;
-      cursor: pointer;
-      text-transform: uppercase;
       font-weight: 500;
-      transition: all 0.2s;
+      text-transform: uppercase;
+      cursor: pointer;
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
     }
-    .btn-dl:hover { background: #ddbf86; }
-    .btn-dl:disabled, .btn-dl.disabled {
+    .btn-dl:active { background: #b8994e; }
+    .btn-dl.off {
       background: var(--border);
       color: var(--muted);
-      cursor: not-allowed;
       pointer-events: none;
     }
 
-    .btn-cancel {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 8px 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s;
+    /* Change image row */
+    .cv-change {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: center;
     }
-    .btn-cancel:hover { border-color: var(--gold-dim); color: var(--gold); }
-
-    /* Keyboard hint */
-    .kbd-hint {
+    .cv-change label {
       font-size: 9px;
-      letter-spacing: 0.1em;
-      color: var(--border);
+      letter-spacing: 0.14em;
+      color: var(--muted);
       text-transform: uppercase;
-      padding: 0 20px 10px;
-      text-align: right;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    /* ─── FOOTER ─── */
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 2px 0;
+      opacity: 0;
+    }
+    .footer-loc { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; }
+    .footer-loc em { color: var(--gold-dim); font-style: normal; }
+    .footer-ver { font-size: 9px; letter-spacing: 0.15em; color: var(--border2); text-transform: uppercase; }
+
+    /* ─── STAGGERED ANIMATIONS ─── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .a1 { animation: rise 0.55s 0.12s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .a2 { animation: rise 0.55s 0.20s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .a3 { animation: rise 0.55s 0.27s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .a4 { animation: rise 0.55s 0.34s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .a5 { animation: rise 0.55s 0.41s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .a6 { animation: rise 0.55s 0.48s cubic-bezier(0.16,1,0.3,1) forwards; }
   </style>
 </head>
 <body>
+<div class="page">
 
-<!-- ── MAIN CARD ── -->
-<div class="card">
-  <div class="scanline"></div>
-
-  <div class="bar">
-    <div class="dot active"></div>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="dot on"></div>
     <div class="dot"></div>
     <div class="dot"></div>
-    <span class="bar-label">contact.vcard — Core Interface</span>
+    <span class="topbar-label">contact.vcard — Core v1.1</span>
   </div>
 
-  <div class="header">
-    <div class="prefix">&gt; <span>ID_CARD</span> · BTS ATI · Initialisé</div>
-    <div class="name">Laurent<br>Battaglia</div>
-    <div class="role">
-      BTS ATI
-      <span class="sep">//</span>
-      Aéronautique
-      <span class="sep">//</span>
-      Ingénierie Industrielle
-    </div>
-    <div class="status">
-      <div class="pulse"></div>
-      Disponible · Stage Mai–Juil 2026
+  <!-- ── HEADER ── -->
+  <div class="header-card a1">
+    <div class="scanline"></div>
+    <div class="header-inner">
+      <div class="prefix">&gt; <em>ID_CARD</em> · BTS ATI · Initialisé</div>
+      <div class="name">
+        <span>Laurent</span>
+        <span class="gold">Battaglia</span>
+      </div>
+      <div class="role">
+        <strong>BTS ATI</strong> · Aéronautique<br>
+        Ingénierie Industrielle · Le Havre
+      </div>
+      <div class="badge-row">
+        <span class="badge badge-green"><span class="pulse"></span>Disponible · Stage</span>
+        <span class="badge badge-gold">Mai – Juil 2026</span>
+      </div>
     </div>
   </div>
 
-  <div class="links">
-
-    <!-- Portfolio -->
-    <a href="https://battaglialaurent.github.io" target="_blank" rel="noopener noreferrer" class="link-item">
+  <!-- ── PROFILS ── -->
+  <div class="section-label a2">Profils en ligne</div>
+  <div class="links-block a2">
+    <a href="https://battaglialaurent.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="link-row">
       <div class="link-icon">⬡</div>
-      <div class="link-content">
+      <div class="link-body">
         <div class="link-type">Portfolio</div>
-        <div class="link-label">battaglialaurent.github.io/Portfolio</div>
+        <div class="link-text">battaglialaurent.github.io</div>
       </div>
       <span class="link-arrow">↗</span>
     </a>
-
-    <div class="divider-label">Réseaux</div>
-
-    <!-- LinkedIn -->
-    <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369" target="_blank" rel="noopener noreferrer" class="link-item">
+    <a href="https://www.linkedin.com/in/laurent-battaglia-havre/" target="_blank" rel="noopener noreferrer" class="link-row">
       <div class="link-icon">in</div>
-      <div class="link-content">
+      <div class="link-body">
         <div class="link-type">LinkedIn</div>
-        <div class="link-label">laurent-battaglia-havre</div>
+        <div class="link-text">laurent-battaglia-havre</div>
       </div>
       <span class="link-arrow">↗</span>
     </a>
-    <!-- Email -->
-    <div class="link-item static">
+    <a href="https://github.com/battaglialaurent" target="_blank" rel="noopener noreferrer" class="link-row">
+      <div class="link-icon">⌥</div>
+      <div class="link-body">
+        <div class="link-type">GitHub</div>
+        <div class="link-text">battaglialaurent</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- ── CONTACT ── -->
+  <div class="section-label a3">Contact direct</div>
+  <div class="links-block a3">
+    <div class="link-row static">
       <div class="link-icon">@</div>
-      <div class="link-content">
+      <div class="link-body">
         <div class="link-type">Email</div>
-        <div class="link-label" id="email-val">battaglialaurent11@gmail.com</div>
+        <div class="link-text" id="email-val">battaglialaurent11@gmail.com</div>
       </div>
-      <button class="copy-btn" onclick="copyText('email-val', this)">Copier</button>
+      <button class="copy-btn" onclick="copyText('email-val',this)">Copier</button>
     </div>
-
-    <!-- Téléphone -->
-    <div class="link-item static">
+    <div class="link-row static">
       <div class="link-icon">#</div>
-      <div class="link-content">
+      <div class="link-body">
         <div class="link-type">Téléphone</div>
-        <div class="link-label" id="tel-val">+33 6 21 84 16 13</div>
+        <div class="link-text" id="tel-val">+33 6 21 84 16 13</div>
       </div>
-      <button class="copy-btn" onclick="copyText('tel-val', this)">Copier</button>
+      <button class="copy-btn" onclick="copyText('tel-val',this)">Copier</button>
     </div>
-
-    <div class="divider-label">Curriculum Vitae</div>
-
-    <!-- CV Button -->
-    <button class="cv-btn" onclick="openCV()">
-      <div class="link-icon" style="font-size:16px;">▤</div>
-      <div class="link-content">
-        <div class="link-type">Document</div>
-        <div class="cv-btn-label">Voir mon CV</div>
-      </div>
-      <span style="color:var(--gold);font-size:12px;">↓</span>
-    </button>
-
   </div>
 
-  <div class="footer">
-    <div class="footer-loc"><span>⌖</span> Le Havre, Normandie</div>
-    <div class="footer-sig">Core v1.1</div>
-  </div>
-</div>
+  <!-- ── CV ── -->
+  <div class="section-label a4">Curriculum Vitae</div>
+  <div class="cv-block a4">
 
-<!-- ── CV MODAL ── -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
-  <div class="modal" id="modal">
-    <div class="modal-bar">
-      <span class="modal-title">&gt; CV_PREVIEW · Laurent Battaglia</span>
-      <button class="modal-close" onclick="closeCV()" title="Fermer (Échap)">✕</button>
+    <div class="cv-topbar">
+      <span class="cv-topbar-label">▤ CV_Laurent_Battaglia</span>
+      <span class="cv-topbar-sub" id="cv-status">En attente</span>
     </div>
 
-    <div class="modal-preview" id="preview-area">
-      <!-- Placeholder sketch -->
-      <div class="cv-placeholder" id="cv-placeholder">
-        <div class="cv-page">
-          <div class="cv-line dark"></div>
-          <div class="cv-line xshort" style="background:#aaa;margin-bottom:4px;"></div>
-          <div class="cv-section"></div>
-          <div class="cv-line mid"></div>
-          <div class="cv-line short"></div>
-          <div class="cv-line mid"></div>
-          <div class="cv-section"></div>
-          <div class="cv-line short"></div>
-          <div class="cv-line mid"></div>
-          <div class="cv-line xshort"></div>
-          <div class="cv-section"></div>
-          <div class="cv-line mid"></div>
-          <div class="cv-line short"></div>
-          <div class="cv-line mid"></div>
-          <div class="cv-line xshort"></div>
+    <div class="cv-display" id="cv-display">
+
+      <!-- État vide -->
+      <div class="cv-empty" id="cv-empty">
+        <div class="cv-sketch">
+          <div class="sk h"></div>
+          <div class="sk w45"></div>
+          <div class="sk s"></div>
+          <div class="sk w80"></div>
+          <div class="sk w60"></div>
+          <div class="sk w70"></div>
+          <div class="sk s"></div>
+          <div class="sk w45"></div>
+          <div class="sk w75"></div>
+          <div class="sk w50"></div>
+          <div class="sk s"></div>
+          <div class="sk w80"></div>
+          <div class="sk w65"></div>
+          <div class="sk w50"></div>
         </div>
-        <div>
-          <p class="cv-placeholder-text">Chargez l'aperçu de votre CV</p>
-          <p class="upload-hint">PNG · JPG acceptés</p>
+        <div class="cv-empty-text">
+          <strong>Chargez votre CV</strong>
+          PNG · JPG acceptés
         </div>
         <label>
-          <span class="upload-label">+ Charger une image</span>
-          <input type="file" accept="image/*" style="display:none;" onchange="loadImage(event)">
+          <span class="upload-label">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M6 1v7M3 4l3-3 3 3M1 10.5h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Charger une image
+          </span>
+          <input type="file" accept="image/*" style="display:none;" onchange="loadCV(event)">
         </label>
       </div>
 
-      <!-- Image preview (shown after upload) -->
-      <img class="img-preview" id="cv-img" alt="Aperçu CV Laurent Battaglia" />
+      <!-- Image chargée -->
+      <img class="cv-image" id="cv-img" alt="CV Laurent Battaglia" />
     </div>
 
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeCV()">Fermer</button>
-      <a class="btn-dl disabled" id="dl-link" href="#" download="CV_Laurent_Battaglia.jpg">
-        ↓ Télécharger le CV
+    <!-- Download bar -->
+    <div class="dl-bar">
+      <div class="dl-info">
+        <div class="dl-name" id="dl-filename">CV_Laurent_Battaglia</div>
+        <div class="dl-meta" id="dl-meta">Chargez une image pour activer</div>
+      </div>
+      <a class="btn-dl off" id="dl-btn" href="#" download="CV_Laurent_Battaglia.jpg">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M6 1v7M3 8l3 3 3-3M1 11h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Télécharger
       </a>
     </div>
-    <div class="kbd-hint">Appuyez sur Échap pour fermer</div>
+
+    <!-- Change image -->
+    <div class="cv-change" id="cv-change">
+      <label>
+        Changer l'image
+        <input type="file" accept="image/*" style="display:none;" onchange="loadCV(event)">
+      </label>
+    </div>
+
   </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer-row a5">
+    <div class="footer-loc"><em>⌖</em> Le Havre, Normandie</div>
+    <div class="footer-ver">Core v1.1</div>
+  </div>
+
 </div>
 
 <script>
-  /* ── CV MODAL ── */
-  function openCV() {
-    document.getElementById('overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
+  /* ── COPY ── */
+  function copyText(id, btn) {
+    const text = document.getElementById(id).textContent.trim();
+    const done = () => {
+      const orig = btn.textContent;
+      btn.textContent = 'Copié ✓';
+      btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2000);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    } else {
+      fallbackCopy(text, done);
+    }
   }
-  function closeCV() {
-    document.getElementById('overlay').classList.remove('open');
-    document.body.style.overflow = '';
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    cb();
   }
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('overlay')) closeCV();
-  }
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeCV();
-  });
 
-  /* ── IMAGE UPLOAD ── */
-  function loadImage(e) {
+  /* ── CV LOAD ── */
+  function loadCV(e) {
     const file = e.target.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
+
+    const url  = URL.createObjectURL(file);
+    const ext  = (file.name.split('.').pop() || 'jpg').toUpperCase();
+    const size = (file.size / 1024 / 1024).toFixed(2);
+    const dlName = 'CV_Laurent_Battaglia.' + ext.toLowerCase();
+
+    // Montrer l'image
     const img = document.getElementById('cv-img');
     img.src = url;
     img.style.display = 'block';
-    document.getElementById('cv-placeholder').style.display = 'none';
-    const dl = document.getElementById('dl-link');
-    const ext = file.name.split('.').pop() || 'jpg';
-    dl.href = url;
-    dl.download = 'CV_Laurent_Battaglia.' + ext;
-    dl.classList.remove('disabled');
-  }
+    document.getElementById('cv-empty').style.display = 'none';
 
-  /* ── COPY TEXT ── */
-  function copyText(id, btn) {
-    const text = document.getElementById(id).textContent.trim();
-    navigator.clipboard.writeText(text).then(function() {
-      showCopied(btn);
-    }).catch(function() {
-      // Fallback for older browsers
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showCopied(btn);
-    });
-  }
-  function showCopied(btn) {
-    const orig = btn.textContent;
-    btn.textContent = 'Copié ✓';
-    btn.classList.add('copied');
-    setTimeout(function() {
-      btn.textContent = orig;
-      btn.classList.remove('copied');
-    }, 2000);
+    // Activer le téléchargement
+    const btn = document.getElementById('dl-btn');
+    btn.href = url;
+    btn.download = dlName;
+    btn.classList.remove('off');
+
+    // Mettre à jour les labels
+    document.getElementById('dl-filename').textContent = dlName;
+    document.getElementById('dl-meta').textContent = size + ' Mo · ' + ext;
+    document.getElementById('cv-status').textContent = 'Chargé · Prêt';
+    document.getElementById('cv-change').style.display = 'block';
   }
 </script>
-
 </body>
 </html>
