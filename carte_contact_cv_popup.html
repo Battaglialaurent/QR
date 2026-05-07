@@ -37,6 +37,9 @@
       --f-mono:    'Space Mono', monospace;
       --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
       --ease: cubic-bezier(0.22,1,0.36,1);
+
+      /* Durée du splash — modifier cette seule valeur pour tout recaler */
+      --splash-dur: 2.3s;
     }
 
     html { height: 100%; background: var(--c-bg-a); -webkit-tap-highlight-color: transparent; }
@@ -81,25 +84,126 @@
       pointer-events: none; z-index: 999; opacity: 0.45;
     }
 
+    /* ─────────────────────────────────────────
+       SPLASH SCREEN
+    ───────────────────────────────────────── */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--c-bg-a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* The overlay itself fades out right as the page appears */
+      animation: fadeOutOverlay 0.55s ease-in-out 2.05s forwards;
+      pointer-events: none; /* never block interactions after anim */
+    }
+
+    .intro-card {
+      width: 300px;
+      height: 180px;
+      background: var(--c-glass-b);
+      backdrop-filter: blur(25px) saturate(1.5);
+      -webkit-backdrop-filter: blur(25px) saturate(1.5);
+      border: 1px solid var(--c-border2);
+      border-radius: var(--r-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 40px 80px rgba(26,46,30,0.18), 0 0 0 1px rgba(255,250,235,0.1) inset;
+      perspective: 800px;
+      /* Start: below viewport, tilted in 3-D */
+      transform: translateY(110vh) rotateX(28deg);
+      animation:
+        cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards,
+        cardExit     0.65s cubic-bezier(0.7, 0, 0.84, 0) 1.9s forwards;
+    }
+
+    .intro-logo {
+      font-family: var(--f-display);
+      font-weight: 300;
+      font-size: 58px;
+      line-height: 1;
+      color: var(--c-forest);
+      letter-spacing: 0.02em;
+    }
+
+    .intro-line {
+      width: 50px;
+      height: 1px;
+      background: var(--c-terra);
+      margin: 14px 0 12px;
+      transform: scaleX(0);
+      transform-origin: left center;
+      animation: lineGrow 0.55s cubic-bezier(0.22,1,0.36,1) 0.82s forwards;
+    }
+
+    .intro-sub {
+      font-family: var(--f-mono);
+      font-size: 8px;
+      letter-spacing: 0.3em;
+      color: var(--c-ink2);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: subFadeIn 0.5s ease 1.0s forwards;
+    }
+
+    @keyframes cardEntrance {
+      to { transform: translateY(0) rotateX(0deg); }
+    }
+
+    /* FIX: opacity must be a separate property, not inside transform */
+    @keyframes cardExit {
+      0%   { transform: translateY(0)    scale(1);   opacity: 1; }
+      100% { transform: translateY(-120vh) scale(0.88); opacity: 0; }
+    }
+
+    @keyframes fadeOutOverlay {
+      to { opacity: 0; visibility: hidden; pointer-events: none; }
+    }
+
+    @keyframes lineGrow {
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes subFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE — hidden until splash exits
+    ───────────────────────────────────────── */
     .page {
       position: relative; z-index: 1;
       max-width: 440px; margin: 0 auto;
       padding: 28px 16px 40px;
       display: flex; flex-direction: column; gap: 10px;
+      /* Hidden until splash finishes; then soft fade-in */
+      opacity: 0;
+      animation: fadeInPage 0.7s ease-out 2.2s forwards;
     }
 
-    /* ── ANIMATIONS ── */
+    @keyframes fadeInPage {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── STAGGER — delays shifted by ~2.3s so they fire after page appears ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .a1 { opacity:0; animation: fadeUp 0.7s 0.08s var(--ease) forwards; }
-    .a2 { opacity:0; animation: fadeUp 0.7s 0.18s var(--ease) forwards; }
-    .a3 { opacity:0; animation: fadeUp 0.7s 0.28s var(--ease) forwards; }
-    .a4 { opacity:0; animation: fadeUp 0.7s 0.38s var(--ease) forwards; }
-    .a5 { opacity:0; animation: fadeUp 0.7s 0.48s var(--ease) forwards; }
-    .a6 { opacity:0; animation: fadeUp 0.7s 0.56s var(--ease) forwards; }
-    .a7 { opacity:0; animation: fadeUp 0.7s 0.64s var(--ease) forwards; }
+    /* Base state: visible (page opacity handles the initial hide) */
+    .a1 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.08s) var(--ease) forwards; }
+    .a2 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.18s) var(--ease) forwards; }
+    .a3 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.28s) var(--ease) forwards; }
+    .a4 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.38s) var(--ease) forwards; }
+    .a5 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.48s) var(--ease) forwards; }
+    .a6 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.56s) var(--ease) forwards; }
+    .a7 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.64s) var(--ease) forwards; }
 
     /* ── NFC TAG ── */
     .nfc-tag {
@@ -288,7 +392,6 @@
     .btn-zoom { background: rgba(255,255,255,0.12); border-color: var(--c-border2); color: var(--c-forest); }
     .btn-zoom:hover { background: var(--c-forest-gl); border-color: rgba(45,90,61,0.5); }
 
-    /* ── Bouton téléchargement PDF ── */
     .btn-dl {
       background: linear-gradient(135deg, var(--c-forest) 0%, #1a3826 100%);
       border-color: var(--c-forest-dk); color: #f0ebe0;
@@ -350,7 +453,6 @@
       border: 1px solid var(--c-border); box-shadow: 0 8px 32px rgba(10,18,12,0.18);
     }
 
-    /* Footer modal : un seul bouton télécharger */
     .modal-footer {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 13px 18px; border-top: 1px solid var(--c-border);
@@ -393,6 +495,15 @@
   </style>
 </head>
 <body>
+
+<!-- ── SPLASH SCREEN ── -->
+<div id="intro-overlay" aria-hidden="true">
+  <div class="intro-card">
+    <div class="intro-logo">LB</div>
+    <div class="intro-line"></div>
+    <div class="intro-sub">Laurent Battaglia</div>
+  </div>
+</div>
 
 <!-- ── MODAL ZOOM CV ── -->
 <div id="cv-modal" role="dialog" aria-modal="true" aria-label="Aperçu du CV">
@@ -535,6 +646,16 @@
 </div>
 
 <script>
+  /* ── Désactive l'overlay après la fin de toutes les animations ── */
+  window.addEventListener('load', () => {
+    const intro = document.getElementById('intro-overlay');
+    if (!intro) return;
+    // Remove from flow after CSS animation completes (~2.6s total)
+    setTimeout(() => {
+      intro.style.display = 'none';
+    }, 2700);
+  });
+
   /* ── Haptique global ── */
   document.addEventListener('pointerdown', e => {
     const t = e.target.closest('.haptic, a[href], button');
