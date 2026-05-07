@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#c8bda4" />
+  <title>Laurent Battaglia</title>
+  <meta name="description" content="Laurent Battaglia — BTS ATI, Aéronautique, Ingénierie Industrielle. Le Havre." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════
+       RESET & VARIABLES
+    ═══════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --c-bg-a:      #cfc4ac;
+      --c-bg-b:      #d9cebc;
+      --c-bg-c:      #c4b99f;
+
+      --c-forest:    #2d5a3d;
+      --c-forest-lt: #4a8c5c;
+      --c-forest-dk: #1a3826;
+      --c-forest-gl: rgba(45,90,61,0.13);
+      --c-forest-gl2:rgba(45,90,61,0.07);
+
+      --c-terra:     #8b3030;
+      --c-terra-gl:  rgba(139,48,48,0.10);
+
+      --c-glass:     rgba(255,250,240,0.38);
+      --c-glass-b:   rgba(255,250,240,0.55);
+      --c-border:    rgba(45,90,61,0.18);
+      --c-border2:   rgba(45,90,61,0.32);
+
+      --c-ink:       #1a2e1e;
+      --c-ink2:      #3d5c45;
+      --c-muted:     #7a7060;
+      --c-green-gl:  rgba(45,90,61,0.15);
+
+      --f-display: 'Cormorant Garamond', serif;
+      --f-mono:    'Space Mono', monospace;
+
+      --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
+      --ease: cubic-bezier(0.22,1,0.36,1);
+    }
+
+    /* ═══════════════════════════════════
+       FOND ANIMÉ
+    ═══════════════════════════════════ */
+    html { height: 100%; background: var(--c-bg-a); -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100dvh;
+      font-family: var(--f-mono);
+      color: var(--c-ink);
+      overflow-x: hidden;
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
+      background: var(--c-bg-a);
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -40%; width: 180%; height: 180%;
+      background:
+        conic-gradient(
+          from 0deg at 35% 45%,
+          #cfc4ac 0deg, #d9cebc 60deg, #c8bca0 130deg,
+          #d2c8b4 200deg, #c4b898 260deg, #d6ccba 330deg, #cfc4ac 360deg
+        ),
+        radial-gradient(ellipse 70% 60% at 25% 30%, rgba(45,90,61,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 75% 70%, rgba(139,48,48,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 55% 85%, rgba(180,165,130,0.18) 0%, transparent 50%);
+      animation: bgDrift 22s ease-in-out infinite alternate;
+      pointer-events: none; z-index: 0;
+    }
+
+    @keyframes bgDrift {
+      0%   { transform: translate(0%,    0%)    rotate(0deg)    scale(1);    }
+      25%  { transform: translate(2.5%, -1.5%)  rotate(0.8deg)  scale(1.02); }
+      50%  { transform: translate(-2%,  2%)     rotate(-0.5deg) scale(1.03); }
+      75%  { transform: translate(1.5%, 1.5%)   rotate(0.6deg)  scale(1.01); }
+      100% { transform: translate(-1.5%,-2.5%)  rotate(-0.9deg) scale(1.02); }
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: 0.45;
+    }
+
+    /* ═══════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════ */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 440px; margin: 0 auto;
+      padding: 28px 16px 40px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    /* ═══════════════════════════════════
+       GLASS HELPER
+    ═══════════════════════════════════ */
+    .glass {
+      background: var(--c-glass);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      position: relative; overflow: hidden;
+    }
+    .glass::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 10%, rgba(255,250,235,0.55) 50%, transparent 90%);
+      pointer-events: none; z-index: 2;
+    }
+
+    /* ═══════════════════════════════════
+       ANIMATIONS ENTRÉE
+    ═══════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .a1 { opacity:0; animation: fadeUp 0.7s 0.08s var(--ease) forwards; }
+    .a2 { opacity:0; animation: fadeUp 0.7s 0.18s var(--ease) forwards; }
+    .a3 { opacity:0; animation: fadeUp 0.7s 0.28s var(--ease) forwards; }
+    .a4 { opacity:0; animation: fadeUp 0.7s 0.38s var(--ease) forwards; }
+    .a5 { opacity:0; animation: fadeUp 0.7s 0.48s var(--ease) forwards; }
+    .a6 { opacity:0; animation: fadeUp 0.7s 0.56s var(--ease) forwards; }
+    .a7 { opacity:0; animation: fadeUp 0.7s 0.64s var(--ease) forwards; }
+
+    /* ═══════════════════════════════════
+       NFC TAG CHIP
+    ═══════════════════════════════════ */
+    .nfc-tag {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 7px 14px; border-radius: 40px;
+      background: var(--c-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--c-border);
+      width: fit-content; margin: 0 auto 4px;
+    }
+    .nfc-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--c-forest);
+      box-shadow: 0 0 8px var(--c-forest);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 6px var(--c-forest); }
+      50%      { opacity:.5; transform:scale(0.7); box-shadow:0 0 3px var(--c-forest); }
+    }
+    .nfc-label { font-size: 9px; letter-spacing: 0.22em; color: var(--c-ink2); text-transform: uppercase; }
+
+    /* ═══════════════════════════════════
+       HERO CARD
+    ═══════════════════════════════════ */
+    .hero {
+      padding: 28px 22px 22px;
+      border-radius: var(--r-lg);
+      background: var(--c-glass);
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
+      border: 1px solid var(--c-border2);
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,90,61,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .scanline {
+      position: absolute; left: 0; right: 0; height: 60px;
+      background: linear-gradient(transparent, rgba(45,90,61,0.035), transparent);
+      animation: scan 6s linear infinite;
+      pointer-events: none; z-index: 1;
+    }
+    @keyframes scan { from { top: -60px; } to { top: 110%; } }
+
+    .hero-inner { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      font-size: 9px; letter-spacing: 0.26em;
+      color: var(--c-forest-dk); text-transform: uppercase; margin-bottom: 14px;
+    }
+    .hero-eyebrow span { color: var(--c-forest); }
+    .hero-name {
+      font-family: var(--f-display); font-weight: 300;
+      font-size: clamp(38px, 12vw, 52px); line-height: 1;
+      letter-spacing: 0.01em; color: var(--c-ink); margin-bottom: 4px;
+    }
+    .hero-name em { font-style: italic; color: var(--c-terra); }
+    .hero-divider {
+      width: 36px; height: 1px;
+      background: linear-gradient(90deg, var(--c-forest), transparent);
+      margin: 14px 0 12px;
+    }
+    .hero-role {
+      font-size: 11px; letter-spacing: 0.09em;
+      color: var(--c-ink2); line-height: 2;
+    }
+    .hero-role strong { color: var(--c-ink); font-weight: 700; }
+
+    .badge-row { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 16px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px; border-radius: 40px;
+      font-size: 9px; letter-spacing: 0.13em; text-transform: uppercase;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid;
+    }
+    .badge-green { background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.35); color: #2d5a3d; }
+    .badge-terra { background: rgba(139,48,48,0.08); border-color: rgba(139,48,48,0.28); color: #8b3030; }
+
+    /* ═══════════════════════════════════
+       SECTION TITLES
+    ═══════════════════════════════════ */
+    .section-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 9px; letter-spacing: 0.25em;
+      color: var(--c-muted); text-transform: uppercase;
+      padding: 0 2px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--c-border), transparent);
+    }
+
+    /* ═══════════════════════════════════
+       LINK LIST
+    ═══════════════════════════════════ */
+    .link-list {
+      display: flex; flex-direction: column;
+      border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid var(--c-border);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    }
+    .link-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      text-decoration: none; color: var(--c-ink);
+      background: var(--c-glass);
+      border-bottom: 1px solid var(--c-border);
+      position: relative;
+      transition: background 0.18s ease, transform 0.12s ease;
+      cursor: pointer;
+    }
+    .link-row:last-child { border-bottom: none; }
+    .link-row::after {
+      content: ''; position: absolute;
+      left: 0; top: 8px; bottom: 8px; width: 2px;
+      background: linear-gradient(180deg, var(--c-forest), transparent);
+      border-radius: 2px;
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .link-row:hover,
+    .link-row:active  { background: rgba(45,90,61,0.07); }
+    .link-row:hover::after,
+    .link-row:active::after { transform: scaleY(1); }
+    .link-row:active  { transform: scale(0.985); }
+    .link-row.static:active { transform: none; }
+
+    .link-icon {
+      width: 38px; height: 38px; border-radius: var(--r-sm);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--c-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; color: var(--c-forest);
+      font-family: var(--f-display); font-weight: 300;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      transition: border-color 0.2s;
+    }
+    .link-row:hover .link-icon { border-color: var(--c-forest); }
+
+    .link-body { flex: 1; min-width: 0; }
+    .link-type  { font-size: 8px; letter-spacing: 0.2em; color: var(--c-muted); text-transform: uppercase; margin-bottom: 3px; }
+    .link-text  { font-size: 12px; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.15s; }
+    .link-row:hover .link-text { color: var(--c-forest); }
+
+    .link-arrow { color: var(--c-forest); font-size: 15px; flex-shrink: 0; opacity: 0.5; transition: opacity 0.15s, transform 0.15s; }
+    .link-row:hover .link-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+    /* ── Action buttons inline (call, save) ── */
+    .inline-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .ia-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--c-border);
+      border-radius: var(--r-sm); color: var(--c-forest);
+      font-size: 15px; cursor: pointer; text-decoration: none;
+      transition: all 0.18s ease; flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ia-btn:hover { background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.4); }
+    .ia-btn:active { transform: scale(0.90); }
+
+    /* ── Copy btn ── */
+    .copy-btn {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-sm);
+      color: var(--c-muted);
+      padding: 6px 11px;
+      font-family: var(--f-mono); font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      transition: all 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .copy-btn:hover  { border-color: rgba(45,90,61,0.4); color: var(--c-forest); background: var(--c-forest-gl2); }
+    .copy-btn.ok     { border-color: var(--c-forest); color: var(--c-forest-lt); background: var(--c-green-gl); }
+
+    /* ═══════════════════════════════════
+       CV BLOCK
+    ═══════════════════════════════════ */
+    .cv-card {
+      border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid var(--c-border2);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    }
+    .cv-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 16px;
+      background: var(--c-forest-gl2);
+      border-bottom: 1px solid var(--c-border2);
+    }
+    .cv-header-left  { font-size: 9px; letter-spacing: 0.18em; color: var(--c-forest); text-transform: uppercase; }
+    .cv-header-right { font-size: 9px; letter-spacing: 0.14em; color: var(--c-muted); text-transform: uppercase; }
+
+    /* Image wrapper with zoom overlay */
+    .cv-img-wrap {
+      position: relative; overflow: hidden; cursor: zoom-in;
+      background: rgba(255,250,240,0.15);
+    }
+    .cv-image {
+      width: 100%; display: block; object-fit: contain;
+      transition: transform 0.35s var(--ease);
+    }
+    .cv-img-wrap:hover .cv-image { transform: scale(1.015); }
+
+    /* Zoom hint overlay */
+    .cv-zoom-hint {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(26,46,30,0.0);
+      transition: background 0.25s;
+      pointer-events: none;
+    }
+    .cv-img-wrap:hover .cv-zoom-hint { background: rgba(26,46,30,0.04); }
+    .cv-zoom-icon {
+      width: 44px; height: 44px;
+      background: rgba(255,250,240,0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--c-border2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--c-forest);
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.22s, transform 0.22s var(--ease);
+    }
+    .cv-img-wrap:hover .cv-zoom-icon { opacity: 1; transform: scale(1); }
+
+    .cv-footer {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      background: var(--c-glass);
+      border-top: 1px solid var(--c-border);
+    }
+    .cv-footer-info { flex: 1; min-width: 0; }
+    .cv-filename { font-size: 11px; color: var(--c-ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cv-meta     { font-size: 9px; letter-spacing: 0.1em; color: var(--c-muted); margin-top: 2px; }
+
+    /* CV action buttons */
+    .cv-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-cv-action {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid; border-radius: var(--r-sm);
+      padding: 10px 14px;
+      font-family: var(--f-mono); font-size: 9.5px;
+      letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: all 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-zoom {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--c-border2);
+      color: var(--c-forest);
+    }
+    .btn-zoom:hover { background: var(--c-forest-gl); border-color: rgba(45,90,61,0.5); }
+
+    .btn-dl {
+      background: linear-gradient(135deg, var(--c-forest) 0%, #1a3826 100%);
+      border-color: var(--c-forest-dk);
+      color: #f0ebe0;
+      box-shadow: 0 4px 16px rgba(45,90,61,0.28);
+    }
+    .btn-dl:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(45,90,61,0.38); filter: brightness(1.08); }
+    .btn-dl:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(45,90,61,0.18); }
+
+    /* ═══════════════════════════════════
+       CV ZOOM MODAL
+    ═══════════════════════════════════ */
+    #cv-modal {
+      position: fixed; inset: 0; z-index: 5000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #cv-modal.open { opacity: 1; pointer-events: all; }
+
+    .modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(10,18,12,0.72);
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    }
+
+    .modal-panel {
+      position: relative; z-index: 1;
+      width: min(560px, 94vw);
+      max-height: 90dvh;
+      display: flex; flex-direction: column;
+      background: var(--c-glass-b);
+      backdrop-filter: blur(28px) saturate(1.6);
+      -webkit-backdrop-filter: blur(28px) saturate(1.6);
+      border: 1px solid var(--c-border2);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(10,18,12,0.35), 0 0 0 1px rgba(255,250,235,0.08) inset;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.38s var(--ease);
+    }
+    #cv-modal.open .modal-panel { transform: translateY(0) scale(1); }
+
+    /* Reflet haut panel */
+    .modal-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,250,235,0.5), transparent);
+      z-index: 2; pointer-events: none;
+    }
+
+    .modal-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--c-border);
+      background: rgba(255,250,240,0.18);
+      flex-shrink: 0;
+    }
+    .modal-bar-title {
+      font-size: 9px; letter-spacing: 0.22em;
+      color: var(--c-forest); text-transform: uppercase;
+    }
+    .modal-close {
+      display: flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: var(--r-sm);
+      background: rgba(255,255,255,0.08); border: 1px solid var(--c-border);
+      color: var(--c-muted); font-size: 16px; cursor: pointer;
+      transition: all 0.18s; line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modal-close:hover { border-color: rgba(139,48,48,0.4); color: var(--c-terra); background: var(--c-terra-gl); }
+
+    .modal-img-area {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding: 16px;
+      background: rgba(26,46,30,0.04);
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal-img-area img {
+      display: block; width: 100%; height: auto;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--c-border);
+      box-shadow: 0 8px 32px rgba(10,18,12,0.18);
+    }
+
+    .modal-footer {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--c-border);
+      background: rgba(255,250,240,0.18);
+      flex-shrink: 0; flex-wrap: wrap;
+    }
+    .modal-footer-label {
+      font-size: 9.5px; letter-spacing: 0.14em;
+      color: var(--c-ink2); text-transform: uppercase;
+    }
+    .modal-footer-actions { display: flex; gap: 8px; }
+    .modal-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 15px; border-radius: var(--r-sm);
+      font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; border: 1px solid; transition: all 0.18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .modal-btn-outline {
+      background: transparent; border-color: var(--c-border2); color: var(--c-forest);
+    }
+    .modal-btn-outline:hover { background: var(--c-forest-gl); border-color: rgba(45,90,61,0.5); }
+    .modal-btn-fill {
+      background: var(--c-forest); border-color: var(--c-forest-dk); color: #f0ebe0;
+      box-shadow: 0 3px 12px rgba(45,90,61,0.22);
+    }
+    .modal-btn-fill:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .modal-btn-fill:active { transform: scale(0.96); }
+
+    /* Mobile: slide from bottom */
+    @media (max-width: 480px) {
+      #cv-modal { align-items: flex-end; padding: 0; }
+      .modal-panel {
+        width: 100%; max-height: 92dvh;
+        border-radius: var(--r-lg) var(--r-lg) 0 0;
+        transform: translateY(100%);
+      }
+      #cv-modal.open .modal-panel { transform: translateY(0); }
+      .modal-handle {
+        display: block; width: 36px; height: 3px;
+        background: var(--c-border2); border-radius: 2px;
+        margin: 10px auto 0; flex-shrink: 0;
+      }
+    }
+    .modal-handle { display: none; }
+
+    /* ═══════════════════════════════════
+       PRINT STYLES
+    ═══════════════════════════════════ */
+    @media print {
+      /* Show only the CV image, nothing else */
+      body::before, body::after { display: none; }
+      .page > *:not(.cv-print-wrapper) { display: none !important; }
+      .cv-print-wrapper { display: block !important; }
+      #cv-modal, .nfc-tag, .hero, .section-title,
+      .link-list, .cv-card .cv-header, .cv-card .cv-footer,
+      .cv-actions, .btn-print { display: none !important; }
+
+      body {
+        background: white !important;
+        padding: 0 !important; margin: 0 !important;
+        min-height: unset;
+      }
+      .page {
+        max-width: 100%; padding: 0; margin: 0;
+        gap: 0;
+      }
+      .cv-card { border: none; backdrop-filter: none; }
+      .cv-image { width: 100%; height: auto; page-break-inside: avoid; }
+      .cv-img-wrap { cursor: default; }
+      .cv-zoom-hint { display: none; }
+    }
+
+    /* ═══════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════ */
+    .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 4px 0;
+    }
+    .footer-loc { font-size: 9px; color: var(--c-muted); letter-spacing: 0.12em; }
+    .footer-loc em { color: var(--c-forest-dk); font-style: normal; }
+    .footer-ver { font-size: 9px; letter-spacing: 0.16em; color: rgba(45,90,61,0.2); text-transform: uppercase; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--c-border2); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     MODAL CV ZOOM
+═══════════════════════════════════ -->
+<div id="cv-modal" role="dialog" aria-modal="true" aria-label="Aperçu du CV">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+  <div class="modal-panel" id="modal-panel">
+    <div class="modal-handle"></div>
+    <div class="modal-bar">
+      <span class="modal-bar-title">▤ CV_Laurent_Battaglia · 2026</span>
+      <button class="modal-close" id="modal-close" aria-label="Fermer">×</button>
+    </div>
+    <div class="modal-img-area">
+      <img
+        src="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
+        alt="CV Laurent Battaglia — vue agrandie"
+        loading="lazy"
+      />
+    </div>
+    <div class="modal-footer">
+      <span class="modal-footer-label">CV · Disponible Mai–Juil 2026</span>
+      <div class="modal-footer-actions">
+        <button class="modal-btn modal-btn-outline" onclick="printCV()">🖨 Imprimer</button>
+        <a
+          href="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
+          download="CV_Laurent_Battaglia.jpg"
+          class="modal-btn modal-btn-fill haptic"
+        >⬇ Télécharger</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE
+═══════════════════════════════════ -->
+<div class="page">
+
+  <!-- NFC TAG -->
+  <div class="nfc-tag a1 haptic">
+    <div class="nfc-dot"></div>
+    <span class="nfc-label">NFC · Carte de contact</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero a2">
+    <div class="scanline"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">› <span>ID_CARD</span> · BTS ATI ·</div>
+      <div class="hero-name">Laurent<br><em>Battaglia</em></div>
+      <div class="hero-divider"></div>
+      <div class="hero-role">
+        <strong>BTS ATI</strong> · Aéronautique<br>
+        Ingénierie Industrielle · Le Havre
+      </div>
+      <div class="badge-row">
+        <span class="badge badge-green">
+          <span class="nfc-dot" style="width:5px;height:5px;flex-shrink:0;"></span>
+          Disponible · Stage Mai–Juil 2026
+        </span>
+        <span class="badge badge-terra">SolidWorks · Catia 3D</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILS -->
+  <div class="section-title a3">Profils en ligne</div>
+  <div class="link-list a3">
+    <a href="https://battaglialaurent.github.io" target="_blank" rel="noopener noreferrer" class="link-row haptic">
+      <div class="link-icon">⬡</div>
+      <div class="link-body">
+        <div class="link-type">Portfolio</div>
+        <div class="link-text">battaglialaurent.github.io</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+    <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369/" target="_blank" rel="noopener noreferrer" class="link-row haptic">
+      <div class="link-icon" style="font-family:var(--f-mono);font-size:11px">in</div>
+      <div class="link-body">
+        <div class="link-type">LinkedIn</div>
+        <div class="link-text">laurent-battaglia-</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+  </div>
+
+  <!-- CONTACT DIRECT -->
+  <div class="section-title a4">Contact direct</div>
+  <div class="link-list a4">
+
+    <!-- Email : copier + mailto -->
+    <div class="link-row static">
+      <div class="link-icon">@</div>
+      <div class="link-body">
+        <div class="link-type">Email</div>
+        <div class="link-text" id="email-val">battaglialaurent11@gmail.com</div>
+      </div>
+      <div class="inline-actions">
+        <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn haptic" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
+        <button class="copy-btn haptic" onclick="copyText('email-val',this)">Copier</button>
+      </div>
+    </div>
+
+    <!-- Téléphone : appeler + sauvegarder + copier -->
+    <div class="link-row static">
+      <div class="link-icon" style="font-family:var(--f-mono);font-size:11px">#</div>
+      <div class="link-body">
+        <div class="link-type">Téléphone</div>
+        <div class="link-text" id="tel-val">+33 6 21 84 16 13</div>
+      </div>
+      <div class="inline-actions">
+        <a href="tel:+33621841613" class="ia-btn haptic" title="Appeler" aria-label="Appeler">📞</a>
+        <button class="copy-btn haptic" onclick="copyText('tel-val',this)">Copier</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CV -->
+  <div class="section-title a5">Curriculum Vitæ</div>
+  <div class="cv-card a5">
+
+    <div class="cv-header">
+      <span class="cv-header-left">▤ CV_Laurent_Battaglia</span>
+      <span class="cv-header-right">2026</span>
+    </div>
+
+    <!-- Image cliquable pour zoom -->
+    <div class="cv-img-wrap haptic" onclick="openModal()" role="button" tabindex="0"
+         aria-label="Agrandir le CV" onkeydown="if(event.key==='Enter')openModal()">
+      <img
+        class="cv-image"
+        src="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
+        alt="CV Laurent Battaglia — cliquer pour agrandir"
+        loading="lazy"
+      />
+      <div class="cv-zoom-hint">
+        <div class="cv-zoom-icon">⤢</div>
+      </div>
+    </div>
+
+    <div class="cv-footer">
+      <div class="cv-footer-info">
+        <div class="cv-filename">CV_Laurent_Battaglia.jpg</div>
+        <div class="cv-meta">Mis à jour · 2026</div>
+      </div>
+      <div class="cv-actions">
+        <button class="btn-cv-action btn-zoom haptic" onclick="openModal()" title="Agrandir">⤢ Zoom</button>
+        <button class="btn-cv-action btn-dl haptic" onclick="printCV()" title="Imprimer / Enregistrer PDF">🖨 PDF</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer a7">
+    <div class="footer-loc"><em>⌖</em> Le Havre, Normandie — France</div>
+    <div class="footer-ver">Core v3.0 · NFC</div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- ═══════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════ -->
+<script>
+/* ── 1. RETOUR HAPTIQUE — écouteur global ── */
+document.addEventListener('pointerdown', e => {
+  const target = e.target.closest('.haptic, a[href], button');
+  if (target && navigator.vibrate) {
+    navigator.vibrate(10);
+  }
+}, { passive: true });
+
+/* ── 2. MODAL CV ZOOM ── */
+const modal      = document.getElementById('cv-modal');
+const modalPanel = document.getElementById('modal-panel');
+
+function openModal() {
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* Swipe bas pour fermer sur mobile */
+let touchStartY = 0, isSwiping = false;
+modalPanel.addEventListener('touchstart', e => {
+  if (modalPanel.scrollTop > 5) return; // on ne swipe que si déjà en haut
+  touchStartY = e.touches[0].clientY;
+  isSwiping = true;
+}, { passive: true });
+modalPanel.addEventListener('touchmove', e => {
+  if (!isSwiping) return;
+  const dy = e.touches[0].clientY - touchStartY;
+  if (dy > 0) {
+    modalPanel.style.transition = 'none';
+    modalPanel.style.transform = `translateY(${dy}px)`;
+  }
+}, { passive: true });
+modalPanel.addEventListener('touchend', e => {
+  if (!isSwiping) return;
+  isSwiping = false;
+  modalPanel.style.transition = '';
+  modalPanel.style.transform = '';
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (dy > 80) closeModal();
+});
+
+/* ── 3. EXPORT PDF via window.print() ── */
+function printCV() {
+  if (navigator.vibrate) navigator.vibrate(10);
+
+  // On cache tout sauf l'image du CV, puis on imprime
+  const style = document.createElement('style');
+  style.id = 'print-override';
+  style.textContent = `
+    @media print {
+      body > * { display: none !important; }
+      body > #print-frame { display: block !important; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Crée un iframe caché avec uniquement l'image du CV
+  const existingFrame = document.getElementById('print-frame');
+  if (existingFrame) existingFrame.remove();
+
+  const imgSrc = document.querySelector('.cv-image').src;
+  const frame = document.createElement('iframe');
+  frame.id = 'print-frame';
+  frame.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;border:none;opacity:0;pointer-events:none;z-index:-1;';
+  document.body.appendChild(frame);
+
+  const doc = frame.contentDocument || frame.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html><html><head>
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { background:#fff; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+      img { max-width:100%; max-height:100vh; object-fit:contain; display:block; }
+      @page { margin: 0.5cm; }
+    </style>
+  </head><body>
+    <img src="${imgSrc}" alt="CV Laurent Battaglia" />
+  </body></html>`);
+  doc.close();
+
+  frame.onload = () => {
+    frame.contentWindow.focus();
+    frame.contentWindow.print();
+    // Nettoyage après impression
+    setTimeout(() => {
+      frame.remove();
+      const s = document.getElementById('print-override');
+      if (s) s.remove();
+    }, 1500);
+  };
+}
+
+/* ── 4. COPIER DANS LE PRESSE-PAPIER ── */
+function copyText(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
+  const confirm = () => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copié';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2200);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(confirm).catch(() => legacyCopy(text, confirm));
+  } else {
+    legacyCopy(text, confirm);
+  }
+}
+function legacyCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  cb();
+}
+</script>
+
+</body>
+</html>
