@@ -3,347 +3,632 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0a08" />
-  <title>Laurent Battaglia — Contact</title>
-  <meta name="description" content="Laurent Battaglia — Étudiant BTS ATI, modélisation 3D, ingénierie industrielle. Le Havre." />
-  <meta property="og:title" content="Laurent Battaglia" />
-  <meta property="og:description" content="BTS ATI · Aéronautique · Ingénierie Industrielle" />
-  <meta property="og:type" content="profile" />
+  <meta name="theme-color" content="#c8bda4" />
+  <title>Laurent Battaglia</title>
+  <meta name="description" content="Laurent Battaglia — BTS ATI, Aéronautique, Ingénierie Industrielle. Le Havre." />
 
+  <!-- Google Fonts : Cormorant Garamond (display élégant) + Space Mono (technique) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
+    /* ─────────────────────────────────────────
+       RESET & VARIABLES
+    ───────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #0a0a08;
-      --surface:    #111110;
-      --border:     #252522;
-      --border2:    #2e2e2a;
-      --gold:       #c8a96e;
-      --gold-dim:   #7a6038;
-      --gold-glow:  rgba(200,169,110,0.12);
-      --ivory:      #e8e0cc;
-      --ivory-dim:  #a09880;
-      --muted:      #5a5850;
-      --green:      #4a8c5c;
-      --green-dim:  #1e3d28;
-      --green-glow: rgba(74,140,92,0.15);
+      /* ── Palette carte de visite ── */
+      /* Beige chaud */
+      --c-bg-a:    #cfc4ac;
+      --c-bg-b:    #d9cebc;
+      --c-bg-c:    #c4b99f;
+      --c-bg-d:    #bfb395;
+
+      /* Vert forêt (couleur dominante carte) */
+      --c-gold:    #2d5a3d;
+      --c-gold-lt: #4a8c5c;
+      --c-gold-dk: #1a3826;
+      --c-gold-gl: rgba(45,90,61,0.13);
+      --c-gold-gl2: rgba(45,90,61,0.07);
+
+      /* Rouge terracotta (accent carte) */
+      --c-blue:    #8b3030;
+      --c-blue-gl: rgba(139,48,48,0.10);
+
+      /* Glass — teintes sable sur fond clair */
+      --c-glass:   rgba(255,250,240,0.38);
+      --c-glass-b: rgba(255,250,240,0.55);
+      --c-border:  rgba(45,90,61,0.18);
+      --c-border2: rgba(45,90,61,0.32);
+
+      /* Texte */
+      --c-ivory:   #1a2e1e;
+      --c-ivory2:  #3d5c45;
+      --c-muted:   #7a7060;
+      --c-green:   #2d5a3d;
+      --c-green-gl:rgba(45,90,61,0.15);
+
+      /* Typo */
+      --f-display: 'Cormorant Garamond', serif;
+      --f-mono:    'Space Mono', monospace;
+
+      /* Radius */
+      --r-sm: 6px;
+      --r-md: 12px;
+      --r-lg: 20px;
     }
 
-    html { background: var(--bg); -webkit-tap-highlight-color: transparent; }
+    /* ─────────────────────────────────────────
+       FOND ANIMÉ — GRADIENT QUI "RESPIRE"
+    ───────────────────────────────────────── */
+    html { height: 100%; }
 
     body {
       min-height: 100dvh;
-      color: var(--ivory);
-      font-family: 'DM Mono', monospace;
+      font-family: var(--f-mono);
+      color: var(--c-ivory);
       overflow-x: hidden;
-      padding-bottom: env(safe-area-inset-bottom, 16px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
+      /* Le fond est géré par le pseudo-element ::before pour l'animation */
+      background: var(--c-bg-a);
+      position: relative;
     }
 
-    /* Grain */
+    /* Calque 1 : gradient animé lent */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -40%;          /* plus grand que l'écran pour que le mouvement soit invisible */
+      width: 180%;
+      height: 180%;
+      background: conic-gradient(
+        from 0deg at 35% 45%,
+        #cfc4ac 0deg,
+        #d9cebc 60deg,
+        #c8bca0 130deg,
+        #d2c8b4 200deg,
+        #c4b898 260deg,
+        #d6ccba 330deg,
+        #cfc4ac 360deg
+      ),
+      radial-gradient(ellipse 70% 60% at 25% 30%, rgba(45,90,61,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 50% at 75% 70%, rgba(139,48,48,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 55% 85%, rgba(180,165,130,0.18) 0%, transparent 50%);
+      animation: bgDrift 22s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgDrift {
+      0%   { transform: translate(0%,    0%)   rotate(0deg)   scale(1);    }
+      25%  { transform: translate(2.5%, -1.5%) rotate(0.8deg) scale(1.02); }
+      50%  { transform: translate(-2%,  2%)    rotate(-0.5deg)scale(1.03); }
+      75%  { transform: translate(1.5%, 1.5%)  rotate(0.6deg) scale(1.01); }
+      100% { transform: translate(-1.5%,-2.5%) rotate(-0.9deg)scale(1.02); }
+    }
+
+    /* Calque 2 : grain fin par-dessus tout */
     body::after {
       content: '';
       position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 999; opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.45;
     }
 
+    /* ─────────────────────────────────────────
+       LAYOUT
+    ───────────────────────────────────────── */
     .page {
-      max-width: 480px;
+      position: relative;
+      z-index: 1;
+      max-width: 440px;
       margin: 0 auto;
-      padding: 18px 14px 40px;
+      padding: 28px 16px 40px;
       display: flex;
       flex-direction: column;
+      gap: 10px;
     }
 
-    /* ── TOP BAR ── */
-    .topbar {
-      display: flex; align-items: center; gap: 6px;
-      padding: 0 2px 14px;
-      opacity: 0;
-      animation: rise 0.5s 0.05s cubic-bezier(0.16,1,0.3,1) forwards;
+    /* ─────────────────────────────────────────
+       HELPER — GLASS CARD
+    ───────────────────────────────────────── */
+    .glass {
+      background: var(--c-glass);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      position: relative;
+      overflow: hidden;
     }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border2); }
-    .dot.on { background: var(--gold); box-shadow: 0 0 5px var(--gold-dim); }
-    .topbar-label { margin-left: auto; font-size: 9px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; }
 
-    /* ── HEADER ── */
-    .header-card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      position: relative; overflow: hidden;
-      opacity: 0;
-      animation: rise 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) forwards;
+    /* Reflet interne haut */
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 10%, rgba(255,250,235,0.55) 40%, rgba(255,250,235,0.55) 60%, transparent 90%);
+      pointer-events: none;
+      z-index: 2;
     }
-    .header-card::before, .header-card::after {
-      content: ''; position: absolute;
-      width: 14px; height: 14px;
-      border-color: var(--gold); border-style: solid; z-index: 2;
-    }
-    .header-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-    .header-card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
+    /* ─────────────────────────────────────────
+       ANIMATIONS D'ENTRÉE
+    ───────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .a1 { opacity:0; animation: fadeUp 0.7s 0.08s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .a2 { opacity:0; animation: fadeUp 0.7s 0.18s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .a3 { opacity:0; animation: fadeUp 0.7s 0.28s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .a4 { opacity:0; animation: fadeUp 0.7s 0.38s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .a5 { opacity:0; animation: fadeUp 0.7s 0.48s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .a6 { opacity:0; animation: fadeUp 0.7s 0.58s cubic-bezier(0.22,1,0.36,1) forwards; }
+
+    /* ─────────────────────────────────────────
+       TOP CHIP / NFC TAG
+    ───────────────────────────────────────── */
+    .nfc-tag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 40px;
+      background: var(--c-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--c-border);
+      width: fit-content;
+      margin: 0 auto 4px;
+    }
+    .nfc-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--c-green);
+      box-shadow: 0 0 8px var(--c-green);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 6px var(--c-green); }
+      50%      { opacity:.5; transform:scale(0.7); box-shadow:0 0 3px var(--c-green); }
+    }
+    .nfc-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: var(--c-ivory2);
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────
+       HERO CARD
+    ───────────────────────────────────────── */
+    .hero {
+      padding: 28px 22px 22px;
+      border-radius: var(--r-lg);
+      background: var(--c-glass);
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
+      border: 1px solid var(--c-border2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Coin décoratif haut gauche */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,90,61,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Ligne scanline très subtile */
     .scanline {
-      position: absolute; left: 0; right: 0; height: 80px;
-      background: linear-gradient(transparent, rgba(200,169,110,0.04), transparent);
-      animation: scan 5s linear infinite;
+      position: absolute; left: 0; right: 0;
+      height: 60px;
+      background: linear-gradient(transparent, rgba(45,90,61,0.035), transparent);
+      animation: scan 6s linear infinite;
       pointer-events: none; z-index: 1;
     }
-    @keyframes scan { from { top: -80px; } to { top: 100%; } }
+    @keyframes scan { from { top: -60px; } to { top: 110%; } }
 
-    .header-inner { padding: 22px 18px 20px; position: relative; z-index: 2; }
-    .prefix { font-size: 9px; letter-spacing: 0.22em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 12px; }
-    .prefix em { color: var(--gold); font-style: normal; }
+    .hero-inner { position: relative; z-index: 2; }
 
-    .name { font-family: 'Syne', sans-serif; font-size: clamp(30px,10vw,38px); font-weight: 800; color: var(--ivory); line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 12px; }
-    .name span { display: block; }
-    .name .gold { color: var(--gold); }
+    .hero-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      color: var(--c-gold-dk);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .hero-eyebrow span { color: var(--c-gold); }
 
-    .role { font-size: 10px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.9; }
-    .role strong { color: var(--ivory-dim); font-weight: 400; }
+    .hero-name {
+      font-family: var(--f-display);
+      font-weight: 300;
+      font-size: clamp(38px, 12vw, 52px);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      color: var(--c-ivory);
+      margin-bottom: 4px;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--c-blue);
+    }
 
-    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border: 1px solid; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; }
-    .badge-green { background: var(--green-glow); border-color: var(--green-dim); color: var(--green); }
-    .badge-gold  { background: var(--gold-glow);  border-color: var(--gold-dim);  color: var(--gold); }
-    .pulse { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 2.2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+    .hero-divider {
+      width: 36px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--c-gold), transparent);
+      margin: 14px 0 12px;
+    }
 
-    /* ── SECTION LABEL ── */
-    .section-label {
+    .hero-role {
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      color: var(--c-ivory2);
+      line-height: 2;
+    }
+    .hero-role strong { color: var(--c-ivory); font-weight: 700; }
+
+    /* Badges */
+    .badge-row {
+      display: flex; gap: 7px; flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px;
+      border-radius: 40px;
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid;
+    }
+    .badge-green {
+      background: rgba(45,90,61,0.12);
+      border-color: rgba(45,90,61,0.35);
+      color: #2d5a3d;
+    }
+    .badge-gold {
+      background: rgba(139,48,48,0.08);
+      border-color: rgba(139,48,48,0.28);
+      color: #8b3030;
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION TITLE
+    ───────────────────────────────────────── */
+    .section-title {
       display: flex; align-items: center; gap: 10px;
-      padding: 16px 2px 8px;
-      font-size: 9px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase;
-      opacity: 0;
+      font-size: 9px; letter-spacing: 0.25em;
+      color: var(--c-muted); text-transform: uppercase;
+      padding: 0 2px;
     }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .section-title::after {
+      content: ''; flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--c-border), transparent);
+    }
 
-    /* ── LINKS ── */
-    .links-block {
+    /* ─────────────────────────────────────────
+       LINK LIST (profils + contact)
+    ───────────────────────────────────────── */
+    .link-list {
       display: flex; flex-direction: column;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      overflow: hidden; opacity: 0;
+      border-radius: var(--r-md);
+      overflow: hidden;
+      border: 1px solid var(--c-border);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
     }
+
     .link-row {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 14px;
       padding: 14px 16px;
-      text-decoration: none; color: var(--ivory);
-      border-bottom: 1px solid var(--border);
-      position: relative; transition: background 0.15s;
+      text-decoration: none; color: var(--c-ivory);
+      background: var(--c-glass);
+      border-bottom: 1px solid var(--c-border);
+      position: relative;
+      transition: background 0.18s ease;
       -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
     }
     .link-row:last-child { border-bottom: none; }
-    .link-row::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px; background: var(--gold);
-      transform: scaleY(0); transition: transform 0.2s;
-    }
-    .link-row:active, .link-row:hover { background: rgba(200,169,110,0.04); }
-    .link-row:active::before, .link-row:hover::before { transform: scaleY(1); }
-    .link-row.static { cursor: default; }
-    .link-row.static:active { background: transparent; }
-    .link-row.static::before { display: none; }
 
-    .link-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 1px solid var(--border2); flex-shrink: 0; font-size: 15px; }
+    /* Accent barre gauche */
+    .link-row::after {
+      content: '';
+      position: absolute; left: 0; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--c-gold), transparent);
+      border-radius: 2px;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .link-row:active,
+    .link-row:hover { background: rgba(201,169,110,0.07); }
+    .link-row:active::after,
+    .link-row:hover::after { transform: scaleY(1); }
+
+    /* Pression tactile */
+    .link-row:active { transform: scale(0.985); }
+    .link-row.static:active { transform: none; }
+
+    .link-icon {
+      width: 38px; height: 38px;
+      border-radius: var(--r-sm);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--c-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+      color: var(--c-gold);
+      font-family: var(--f-display);
+      font-weight: 300;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
     .link-body { flex: 1; min-width: 0; }
-    .link-type { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
-    .link-text { font-size: 12px; color: var(--ivory); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .link-arrow { color: var(--gold); font-size: 14px; flex-shrink: 0; opacity: 0.5; }
+    .link-type {
+      font-size: 8px; letter-spacing: 0.2em;
+      color: var(--c-muted); text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .link-text {
+      font-size: 12px; color: var(--c-ivory);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .link-arrow {
+      color: var(--c-gold); font-size: 15px;
+      flex-shrink: 0; opacity: 0.5;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .link-row:hover .link-arrow,
+    .link-row:active .link-arrow {
+      opacity: 1; transform: translate(2px, -2px);
+    }
 
+    /* Bouton copier */
     .copy-btn {
-      background: none; border: 1px solid var(--border2); color: var(--muted);
-      padding: 6px 10px; font-family: 'DM Mono', monospace; font-size: 9px;
-      letter-spacing: 0.1em; cursor: pointer; text-transform: uppercase;
-      transition: all 0.2s; flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-sm);
+      color: var(--c-muted);
+      padding: 6px 11px;
+      font-family: var(--f-mono); font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
     }
-    .copy-btn:active, .copy-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-    .copy-btn.ok { border-color: var(--green); color: var(--green); }
+    .copy-btn:active { transform: scale(0.94); }
+    .copy-btn:hover  { border-color: var(--c-gold-dk); color: var(--c-gold); background: var(--c-gold-gl2); }
+    .copy-btn.ok     { border-color: var(--c-green); color: #7ecfa0; background: var(--c-green-gl); }
 
-    /* ── CV BLOCK ── */
-    .cv-block {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      overflow: hidden; opacity: 0;
-      position: relative;
+    /* ─────────────────────────────────────────
+       CV BLOCK
+    ───────────────────────────────────────── */
+    .cv-card {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      border: 1px solid var(--c-border2);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
     }
-    .cv-block::before, .cv-block::after {
-      content: ''; position: absolute;
-      width: 12px; height: 12px;
-      border-color: var(--gold); border-style: solid;
-      z-index: 2; pointer-events: none;
-    }
-    .cv-block::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-    .cv-block::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-    .cv-topbar {
+    .cv-header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px; border-bottom: 1px solid var(--border);
-      background: rgba(200,169,110,0.03);
+      padding: 11px 16px;
+      background: var(--c-gold-gl2);
+      border-bottom: 1px solid var(--c-border2);
     }
-    .cv-topbar-label { font-size: 9px; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; }
-    .cv-topbar-sub   { font-size: 8px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+    .cv-header-left  { font-size: 9px; letter-spacing: 0.18em; color: var(--c-gold); text-transform: uppercase; }
+    .cv-header-right { font-size: 9px; letter-spacing: 0.14em; color: var(--c-muted); text-transform: uppercase; }
 
-    /* Image CV */
     .cv-image {
       width: 100%;
       display: block;
       object-fit: contain;
     }
 
-    /* Barre téléchargement */
-    .dl-bar {
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
-      display: flex; align-items: center; gap: 10px;
-      background: rgba(200,169,110,0.03);
+    .cv-footer {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      background: var(--c-glass);
+      border-top: 1px solid var(--c-border);
     }
-    .dl-info { flex: 1; min-width: 0; }
-    .dl-name { font-size: 11px; color: var(--ivory-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .dl-meta { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-top: 2px; }
+    .cv-footer-info { flex: 1; min-width: 0; }
+    .cv-filename { font-size: 11px; color: var(--c-ivory2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cv-meta     { font-size: 9px; letter-spacing: 0.1em; color: var(--c-muted); margin-top: 2px; }
 
     .btn-dl {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--gold); border: none; color: #0a0a08;
-      padding: 12px 18px;
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      letter-spacing: 0.12em; font-weight: 500; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--c-gold) 0%, #b8994e 100%);
+      border: none; border-radius: var(--r-sm);
+      color: #0a0a08;
+      padding: 11px 18px;
+      font-family: var(--f-mono); font-size: 10px;
+      letter-spacing: 0.13em; font-weight: 700;
+      text-transform: uppercase;
       cursor: pointer; text-decoration: none;
-      transition: background 0.2s; flex-shrink: 0;
-      -webkit-tap-highlight-color: transparent; white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(201,169,110,0.3);
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+      flex-shrink: 0; white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn-dl:active { background: #b8994e; }
+    .btn-dl:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(201,169,110,0.2);
+      filter: brightness(0.9);
+    }
+    .btn-dl:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(201,169,110,0.42);
+      filter: brightness(1.06);
+    }
 
-    /* ── FOOTER ── */
-    .footer-row {
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    .footer {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 16px 2px 0; opacity: 0;
+      padding: 12px 4px 0;
     }
-    .footer-loc { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; }
-    .footer-loc em { color: var(--gold-dim); font-style: normal; }
-    .footer-ver { font-size: 9px; letter-spacing: 0.15em; color: var(--border2); text-transform: uppercase; }
+    .footer-loc { font-size: 9px; color: var(--c-muted); letter-spacing: 0.12em; }
+    .footer-loc em { color: var(--c-gold-dk); font-style: normal; }
+    .footer-ver { font-size: 9px; letter-spacing: 0.16em; color: rgba(255,255,255,0.08); text-transform: uppercase; }
 
-    /* ── ANIMATIONS ── */
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .a1 { animation: rise 0.55s 0.12s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .a2 { animation: rise 0.55s 0.20s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .a3 { animation: rise 0.55s 0.27s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .a4 { animation: rise 0.55s 0.34s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .a5 { animation: rise 0.55s 0.41s cubic-bezier(0.16,1,0.3,1) forwards; }
   </style>
 </head>
 <body>
 <div class="page">
 
-  <div class="topbar">
-    <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
-    <span class="topbar-label">contact.vcard — </span>
+  <!-- ── CHIP NFC ── -->
+  <div class="nfc-tag a1">
+    <div class="nfc-dot"></div>
+    <span class="nfc-label">NFC · Contact</span>
   </div>
 
-  <!-- HEADER -->
-  <div class="header-card a1">
+  <!-- ── HERO CARD ── -->
+  <div class="hero a2">
     <div class="scanline"></div>
-    <div class="header-inner">
-      <div class="prefix">&gt; <em>ID_CARD</em> · BTS ATI · </div>
-      <div class="name">
-        <span>Laurent</span>
-        <span class="gold">Battaglia</span>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">&rsaquo; <span>ID_CARD</span> · BTS ATI ·</div>
+      <div class="hero-name">
+        Laurent<br><em>Battaglia</em>
       </div>
-      <div class="role">
+      <div class="hero-divider"></div>
+      <div class="hero-role">
         <strong>BTS ATI</strong> · Aéronautique<br>
         Ingénierie Industrielle · Le Havre
       </div>
       <div class="badge-row">
-        <span class="badge badge-green"><span class="pulse"></span>Disponible · Alternance · Stage</span>
-    
+        <span class="badge badge-green">
+          <span class="nfc-dot" style="width:5px;height:5px;flex-shrink:0;"></span>
+          Disponible · Alternance · Stage
+        </span>
       </div>
     </div>
   </div>
 
-  <!-- PROFILS -->
-  <div class="section-label a2">Profils en ligne</div>
-  <div class="links-block a2">
+  <!-- ── PROFILS EN LIGNE ── -->
+  <div class="section-title a3">Profils en ligne</div>
+  <div class="link-list a3">
     <a href="https://battaglialaurent.github.io/" target="_blank" rel="noopener noreferrer" class="link-row">
       <div class="link-icon">⬡</div>
-      <div class="link-body"><div class="link-type">Portfolio</div><div class="link-text">battaglialaurent.github.io</div></div>
+      <div class="link-body">
+        <div class="link-type">Portfolio</div>
+        <div class="link-text">battaglialaurent.github.io</div>
+      </div>
       <span class="link-arrow">↗</span>
     </a>
     <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369/" target="_blank" rel="noopener noreferrer" class="link-row">
       <div class="link-icon">in</div>
-      <div class="link-body"><div class="link-type">LinkedIn</div><div class="link-text">laurent-battaglia-havre</div></div>
+      <div class="link-body">
+        <div class="link-type">LinkedIn</div>
+        <div class="link-text">laurent-battaglia-havre</div>
+      </div>
       <span class="link-arrow">↗</span>
     </a>
   </div>
 
-  <!-- CONTACT -->
-  <div class="section-label a3">Contact direct</div>
-  <div class="links-block a3">
+  <!-- ── CONTACT DIRECT ── -->
+  <div class="section-title a4">Contact direct</div>
+  <div class="link-list a4">
     <div class="link-row static">
       <div class="link-icon">@</div>
-      <div class="link-body"><div class="link-type">Email</div><div class="link-text" id="email-val">battaglialaurent11@gmail.com</div></div>
-      <button class="copy-btn" onclick="copyText('email-val',this)">Copier</button>
+      <div class="link-body">
+        <div class="link-type">Email</div>
+        <div class="link-text" id="email-val">battaglialaurent11@gmail.com</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('email-val', this)">Copier</button>
     </div>
     <div class="link-row static">
       <div class="link-icon">#</div>
-      <div class="link-body"><div class="link-type">Téléphone</div><div class="link-text" id="tel-val">+33 6 21 84 16 13</div></div>
-      <button class="copy-btn" onclick="copyText('tel-val',this)">Copier</button>
+      <div class="link-body">
+        <div class="link-type">Téléphone</div>
+        <div class="link-text" id="tel-val">+33 6 21 84 16 13</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('tel-val', this)">Copier</button>
     </div>
   </div>
 
-  <!-- CV -->
-  <div class="section-label a4">Curriculum Vitae</div>
-  <div class="cv-block a4">
-
-    <div class="cv-topbar">
-      <span class="cv-topbar-label">▤ CV_Laurent_Battaglia</span>
-      <span class="cv-topbar-sub">2026</span>
+  <!-- ── CV ── -->
+  <div class="section-title a5">Curriculum Vitæ</div>
+  <div class="cv-card a5">
+    <div class="cv-header">
+      <span class="cv-header-left">▤ CV_Laurent_Battaglia</span>
+      <span class="cv-header-right">2026</span>
     </div>
     <img
       class="cv-image"
       src="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
       alt="CV Laurent Battaglia"
+      loading="lazy"
     />
-
-    <div class="dl-bar">
-      <div class="dl-info">
-        <div class="dl-name">CV_Laurent_Battaglia.jpg</div>
+    <div class="cv-footer">
+      <div class="cv-footer-info">
+        <div class="cv-filename">CV_Laurent_Battaglia.jpg</div>
+        <div class="cv-meta">Mis à jour · 2026</div>
       </div>
       <a
-  <!-- FOOTER -->
-  <div class="footer-row a5">
-    <div class="footer-loc"><em>⌖</em> Le Havre, Normandie</div>
-    <div class="footer-ver">Core v1.1</div>
+        href="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
+        download="CV_Laurent_Battaglia.jpg"
+        class="btn-dl"
+      >
+        ↓ Télécharger
+      </a>
+    </div>
   </div>
 
-</div>
+  <!-- ── FOOTER ── -->
+  <div class="footer a6">
+    <div class="footer-loc"><em>⌖</em> Le Havre, Normandie</div>
+    <div class="footer-ver">v2.0 · NFC</div>
+  </div>
+
+</div><!-- /page -->
 
 <script>
+  /* ── Copier dans le presse-papier ── */
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
-    const done = () => {
+    const confirm = () => {
       const orig = btn.textContent;
       btn.textContent = 'Copié ✓';
       btn.classList.add('ok');
-      setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2000);
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2200);
     };
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(done).catch(() => fallback(text, done));
+      navigator.clipboard.writeText(text).then(confirm).catch(() => legacyCopy(text, confirm));
     } else {
-      fallback(text, done);
+      legacyCopy(text, confirm);
     }
   }
-  function fallback(text, cb) {
+  function legacyCopy(text, cb) {
     const ta = document.createElement('textarea');
-    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;';
-    document.body.appendChild(ta); ta.select();
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta);
+    ta.select();
     try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta); cb();
+    document.body.removeChild(ta);
+    cb();
   }
 </script>
 </body>
