@@ -11,7 +11,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Preload critical font subset to avoid FOIT during splash -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
@@ -42,8 +41,7 @@
       --f-mono:    'Space Mono', monospace;
       --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
       --ease: cubic-bezier(0.22,1,0.36,1);
-
-      /* Durée du splash — modifier cette seule valeur pour tout recaler */
+      --spring: cubic-bezier(0.34,1.56,0.64,1);
       --splash-dur: 2.3s;
     }
 
@@ -75,11 +73,11 @@
     }
 
     @keyframes bgDrift {
-      0%   { transform: translate(0%,    0%)    rotate(0deg)    scale(1);    }
-      25%  { transform: translate(2.5%, -1.5%)  rotate(0.8deg)  scale(1.02); }
-      50%  { transform: translate(-2%,  2%)     rotate(-0.5deg) scale(1.03); }
-      75%  { transform: translate(1.5%, 1.5%)   rotate(0.6deg)  scale(1.01); }
-      100% { transform: translate(-1.5%,-2.5%)  rotate(-0.9deg) scale(1.02); }
+      0%   { transform: translate(0%, 0%) rotate(0deg) scale(1); }
+      25%  { transform: translate(2.5%, -1.5%) rotate(0.8deg) scale(1.02); }
+      50%  { transform: translate(-2%, 2%) rotate(-0.5deg) scale(1.03); }
+      75%  { transform: translate(1.5%, 1.5%) rotate(0.6deg) scale(1.01); }
+      100% { transform: translate(-1.5%, -2.5%) rotate(-0.9deg) scale(1.02); }
     }
 
     body::after {
@@ -89,113 +87,44 @@
       pointer-events: none; z-index: 999; opacity: 0.45;
     }
 
-    /* ─────────────────────────────────────────
-       SPLASH SCREEN
-    ───────────────────────────────────────── */
+    /* ─── SPLASH ─── */
     #intro-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: var(--c-bg-a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; z-index: 9999; background: var(--c-bg-a);
+      display: flex; align-items: center; justify-content: center;
       animation: fadeOutOverlay 0.55s ease-in-out 2.05s forwards;
       pointer-events: none;
     }
-
     .intro-card {
-      width: 300px;
-      height: 180px;
+      width: 300px; height: 180px;
       background: var(--c-glass-b);
       backdrop-filter: blur(25px) saturate(1.5);
       -webkit-backdrop-filter: blur(25px) saturate(1.5);
-      border: 1px solid var(--c-border2);
-      border-radius: var(--r-lg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      border: 1px solid var(--c-border2); border-radius: var(--r-lg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       box-shadow: 0 40px 80px rgba(26,46,30,0.18), 0 0 0 1px rgba(255,250,235,0.1) inset;
-      perspective: 800px;
       transform: translateY(110vh) rotateX(28deg);
-      animation:
-        cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards,
-        cardExit     0.65s cubic-bezier(0.7, 0, 0.84, 0) 1.9s forwards;
+      animation: cardEntrance 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s forwards,
+                 cardExit 0.65s cubic-bezier(0.7,0,0.84,0) 1.9s forwards;
     }
+    .intro-logo { font-family: var(--f-display); font-weight: 300; font-size: 58px; line-height: 1; color: var(--c-forest); letter-spacing: 0.02em; }
+    .intro-line { width: 50px; height: 1px; background: var(--c-terra); margin: 14px 0 12px; transform: scaleX(0); transform-origin: left center; animation: lineGrow 0.55s cubic-bezier(0.22,1,0.36,1) 0.82s forwards; }
+    .intro-sub { font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.3em; color: var(--c-ink2); text-transform: uppercase; opacity: 0; animation: subFadeIn 0.5s ease 1.0s forwards; }
+    @keyframes cardEntrance { to { transform: translateY(0) rotateX(0deg); } }
+    @keyframes cardExit { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-120vh) scale(0.88); opacity: 0; } }
+    @keyframes fadeOutOverlay { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    @keyframes lineGrow { to { transform: scaleX(1); } }
+    @keyframes subFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-    .intro-logo {
-      font-family: var(--f-display);
-      font-weight: 300;
-      font-size: 58px;
-      line-height: 1;
-      color: var(--c-forest);
-      letter-spacing: 0.02em;
-    }
-
-    .intro-line {
-      width: 50px;
-      height: 1px;
-      background: var(--c-terra);
-      margin: 14px 0 12px;
-      transform: scaleX(0);
-      transform-origin: left center;
-      animation: lineGrow 0.55s cubic-bezier(0.22,1,0.36,1) 0.82s forwards;
-    }
-
-    .intro-sub {
-      font-family: var(--f-mono);
-      font-size: 8px;
-      letter-spacing: 0.3em;
-      color: var(--c-ink2);
-      text-transform: uppercase;
-      opacity: 0;
-      animation: subFadeIn 0.5s ease 1.0s forwards;
-    }
-
-    @keyframes cardEntrance {
-      to { transform: translateY(0) rotateX(0deg); }
-    }
-
-    @keyframes cardExit {
-      0%   { transform: translateY(0)    scale(1);   opacity: 1; }
-      100% { transform: translateY(-120vh) scale(0.88); opacity: 0; }
-    }
-
-    @keyframes fadeOutOverlay {
-      to { opacity: 0; visibility: hidden; pointer-events: none; }
-    }
-
-    @keyframes lineGrow {
-      to { transform: scaleX(1); }
-    }
-
-    @keyframes subFadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ─────────────────────────────────────────
-       PAGE — hidden until splash exits
-    ───────────────────────────────────────── */
+    /* ─── PAGE ─── */
     .page {
       position: relative; z-index: 1;
       max-width: 440px; margin: 0 auto;
       padding: 28px 16px 40px;
       display: flex; flex-direction: column; gap: 10px;
-      opacity: 0;
-      animation: fadeInPage 0.7s ease-out 2.2s forwards;
+      opacity: 0; animation: fadeInPage 0.7s ease-out 2.2s forwards;
     }
-
-    @keyframes fadeInPage {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
     .a1 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.08s) var(--ease) forwards; }
     .a2 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.18s) var(--ease) forwards; }
     .a3 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.28s) var(--ease) forwards; }
@@ -204,34 +133,62 @@
     .a6 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.56s) var(--ease) forwards; }
     .a7 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.64s) var(--ease) forwards; }
 
-    /* ── NFC TAG ── */
+    /* ─── NFC TAG ─── */
     .nfc-tag {
       display: flex; align-items: center; justify-content: center; gap: 8px;
       padding: 9px 18px; border-radius: 40px;
       background: var(--c-glass);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--c-border);
-      width: fit-content; margin: 0 auto 4px;
-      min-height: 44px;
+      width: fit-content; margin: 0 auto 4px; min-height: 44px;
+      position: relative; overflow: hidden;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.3s;
+    }
+    .nfc-tag::before {
+      content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(255,250,235,0.55), transparent);
+      transform: skewX(-18deg); transition: left 0s;
+    }
+    .nfc-tag:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(45,90,61,0.14); border-color: rgba(45,90,61,0.38); }
+    .nfc-tag:hover::before { left: 160%; transition: left 0.55s ease; }
+    .nfc-tag:active { transform: scale(0.94) translateY(0); transition-duration: 0.1s; }
+
+    /* NFC pulse rings */
+    .nfc-rings {
+      position: relative; width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .nfc-dot {
-      width: 7px; height: 7px; border-radius: 50%;
+      width: 7px; height: 7px; border-radius: 50%; z-index: 1;
       background: var(--c-forest); box-shadow: 0 0 8px var(--c-forest);
       animation: pulse 2.4s ease-in-out infinite;
+      position: relative;
+    }
+    .nfc-ring {
+      position: absolute; border-radius: 50%;
+      border: 1.5px solid rgba(45,90,61,0.6);
+      animation: nfcRing 2.4s ease-out infinite;
+    }
+    .nfc-ring:nth-child(2) { width: 12px; height: 12px; animation-delay: 0.4s; }
+    .nfc-ring:nth-child(3) { width: 18px; height: 18px; animation-delay: 0.8s; }
+    @keyframes nfcRing {
+      0% { transform: scale(0.4); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
     }
     @keyframes pulse {
-      0%,100% { opacity:1; transform:scale(1); box-shadow:0 0 6px var(--c-forest); }
-      50%      { opacity:.5; transform:scale(0.7); box-shadow:0 0 3px var(--c-forest); }
+      0%,100% { opacity: 1; transform: scale(1); box-shadow: 0 0 6px var(--c-forest); }
+      50% { opacity: .5; transform: scale(0.7); box-shadow: 0 0 3px var(--c-forest); }
     }
     .nfc-label { font-size: 10px; letter-spacing: 0.2em; color: var(--c-ink2); text-transform: uppercase; }
 
-    /* ── HERO ── */
+    /* ─── HERO ─── */
     .hero {
       padding: 28px 20px 24px; border-radius: var(--r-lg);
       background: var(--c-glass);
       backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6);
       border: 1px solid var(--c-border2);
-      position: relative; overflow: hidden;
+      position: relative; overflow: hidden; will-change: transform;
+      transition: box-shadow 0.4s ease;
     }
     .hero::after {
       content: ''; position: absolute; top: -60px; right: -60px;
@@ -249,12 +206,26 @@
     .hero-inner { position: relative; z-index: 2; }
     .hero-eyebrow { font-size: 10px; letter-spacing: 0.22em; color: var(--c-forest-dk); text-transform: uppercase; margin-bottom: 14px; }
     .hero-eyebrow span { color: var(--c-forest); }
+
+    /* Hero name with glitch capability */
     .hero-name {
       font-family: var(--f-display); font-weight: 300;
       font-size: clamp(44px, 14vw, 58px); line-height: 1;
       letter-spacing: 0.01em; color: var(--c-ink); margin-bottom: 4px;
+      position: relative; cursor: default; user-select: none;
     }
-    .hero-name em { font-style: italic; color: var(--c-terra); }
+    .hero-name em { font-style: italic; color: var(--c-terra); display: inline-block; }
+    .hero-name.glitching em { animation: glitchText 0.4s steps(2) forwards; }
+    @keyframes glitchText {
+      0%   { transform: translate(0,0) skewX(0deg); filter: none; }
+      15%  { transform: translate(-3px, 1px) skewX(-4deg); filter: hue-rotate(20deg); }
+      30%  { transform: translate(3px, -1px) skewX(3deg); filter: hue-rotate(-10deg); }
+      45%  { transform: translate(-2px, 2px) skewX(1deg); }
+      60%  { transform: translate(2px, -2px) skewX(-2deg); }
+      75%  { transform: translate(-1px, 1px) skewX(1deg); }
+      100% { transform: translate(0,0) skewX(0deg); filter: none; }
+    }
+
     .hero-divider { width: 36px; height: 1px; background: linear-gradient(90deg, var(--c-forest), transparent); margin: 16px 0 14px; }
     .hero-role { font-size: 13px; letter-spacing: 0.07em; color: var(--c-ink2); line-height: 2; }
     .hero-role strong { color: var(--c-ink); font-weight: 700; }
@@ -265,19 +236,29 @@
       padding: 7px 13px; border-radius: 40px; min-height: 34px;
       font-size: 10px; letter-spacing: 0.11em; text-transform: uppercase;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid;
+      cursor: default; position: relative; overflow: hidden;
+      transition: transform 0.2s var(--spring), box-shadow 0.2s ease;
     }
-    .badge-green { background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.35); color: #2d5a3d; }
-    .badge-terra { background: rgba(139,48,48,0.08); border-color: rgba(139,48,48,0.28); color: #8b3030; }
+    .badge-green { background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.35); color: #2d5a3d; animation: badgeFloat 4.2s ease-in-out infinite; }
+    .badge-terra { background: rgba(139,48,48,0.08); border-color: rgba(139,48,48,0.28); color: #8b3030; animation: badgeFloat 4.2s ease-in-out 0.9s infinite; }
+    @keyframes badgeFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+    .badge:active { transform: scale(0.93) translateY(0) !important; animation-play-state: paused; transition-duration: 0.08s; }
 
-    /* ── SECTION TITLES ── */
+    /* ─── SECTION TITLES ─── */
     .section-title {
       display: flex; align-items: center; gap: 10px;
       font-size: 10px; letter-spacing: 0.22em; color: var(--c-muted); text-transform: uppercase;
       padding: 4px 2px;
     }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--c-border), transparent); }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--c-border), transparent);
+      transform-origin: left; transform: scaleX(0);
+      transition: transform 0.6s var(--ease);
+    }
+    .section-title.line-visible::after { transform: scaleX(1); }
 
-    /* ── LINK LIST ── */
+    /* ─── LINK LIST ─── */
     .link-list {
       display: flex; flex-direction: column; border-radius: var(--r-md); overflow: hidden;
       border: 1px solid var(--c-border);
@@ -285,65 +266,102 @@
     }
     .link-row {
       display: flex; align-items: center; gap: 14px;
-      /* min 56px pour zone tactile confortable */
-      padding: 16px 16px; min-height: 56px;
+      padding: 14px 16px; min-height: 56px;
       text-decoration: none; color: var(--c-ink); background: var(--c-glass);
       border-bottom: 1px solid var(--c-border); position: relative;
-      transition: background 0.18s ease, transform 0.12s ease; cursor: pointer;
+      transition: background 0.18s ease, transform 0.22s var(--spring); cursor: pointer;
+      overflow: hidden;
     }
     .link-row:last-child { border-bottom: none; }
     .link-row::after {
       content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px;
       background: linear-gradient(180deg, var(--c-forest), transparent); border-radius: 2px;
       transform: scaleY(0); transform-origin: top;
-      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+      transition: transform 0.22s var(--spring);
     }
-    .link-row:active { background: rgba(45,90,61,0.07); }
-    .link-row:active::after { transform: scaleY(1); }
-    .link-row:active { transform: scale(0.985); }
-    .link-row.static:active { transform: none; }
+    .link-row.pressed { background: rgba(45,90,61,0.07); transform: scale(0.985); transition-duration: 0.08s; }
+    .link-row.pressed::after { transform: scaleY(1); }
+    .link-row.static.pressed { transform: none; }
 
     .link-icon {
-      /* 44×44 = taille tactile minimale recommandée */
       width: 44px; height: 44px; border-radius: var(--r-sm);
       background: rgba(255,255,255,0.05); border: 1px solid var(--c-border);
       display: flex; align-items: center; justify-content: center;
       font-size: 17px; flex-shrink: 0; color: var(--c-forest);
       font-family: var(--f-display); font-weight: 300;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, transform 0.32s var(--spring), background 0.2s;
     }
+    .link-row:hover .link-icon { border-color: var(--c-forest); transform: scale(1.12) rotate(-4deg); background: rgba(45,90,61,0.10); }
+    .link-row.pressed .link-icon { transform: scale(0.92) rotate(0deg); transition-duration: 0.1s; }
+
     .link-body { flex: 1; min-width: 0; }
     .link-type { font-size: 9px; letter-spacing: 0.18em; color: var(--c-muted); text-transform: uppercase; margin-bottom: 4px; }
-    .link-text { font-size: 13px; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.15s; }
-    .link-arrow { color: var(--c-forest); font-size: 17px; flex-shrink: 0; opacity: 0.5; transition: opacity 0.15s, transform 0.15s; }
+
+    /* ── FIX EMAIL : permettre le retour à la ligne sur petits écrans ── */
+    .link-text {
+      font-size: 13px; color: var(--c-ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color 0.15s;
+      display: block; max-width: 100%;
+    }
+    /* Email et téléphone : retour à la ligne autorisé, police réduite si nécessaire */
+    .link-text-contact {
+      font-size: 12px; color: var(--c-ink);
+      word-break: break-all; white-space: normal; line-height: 1.4;
+      transition: color 0.15s;
+      display: block; max-width: 100%;
+      text-decoration: none;
+    }
+    /* Responsive : sur très petits écrans encore plus petit */
+    @media (max-width: 360px) {
+      .link-text-contact { font-size: 10.5px; }
+    }
+
+    .link-arrow {
+      color: var(--c-forest); font-size: 17px; flex-shrink: 0; opacity: 0.5;
+      transition: opacity 0.15s, transform 0.28s var(--ease);
+    }
+    .link-row:hover .link-arrow { opacity: 1; transform: translate(4px, -4px) scale(1.15); }
 
     .inline-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .ia-btn {
       display: flex; align-items: center; justify-content: center;
-      /* 44×44 zone tactile */
       width: 44px; height: 44px;
       background: rgba(255,255,255,0.06); border: 1px solid var(--c-border);
       border-radius: var(--r-sm); color: var(--c-forest);
       font-size: 18px; cursor: pointer; text-decoration: none;
-      transition: all 0.18s ease; flex-shrink: 0;
+      transition: all 0.22s var(--spring); flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
+      position: relative; overflow: hidden;
     }
-    .ia-btn:active { transform: scale(0.88); background: rgba(45,90,61,0.18); transition-duration: 0.08s; }
+    .ia-btn:active { transform: scale(0.82); background: rgba(45,90,61,0.18); transition-duration: 0.08s; }
 
     .copy-btn {
       flex-shrink: 0; background: rgba(255,255,255,0.04); border: 1px solid var(--c-border);
       border-radius: var(--r-sm); color: var(--c-muted);
-      /* padding vertical pour atteindre ~44px de hauteur */
-      padding: 12px 13px;
+      padding: 0 13px; min-height: 44px; min-width: 64px;
       font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.18s ease; -webkit-tap-highlight-color: transparent;
-      min-height: 44px;
+      cursor: pointer; transition: all 0.22s var(--spring); -webkit-tap-highlight-color: transparent;
+      position: relative; overflow: hidden;
     }
-    .copy-btn:active { background: var(--c-forest-gl2); }
-    .copy-btn.ok    { border-color: var(--c-forest); color: var(--c-forest-lt); background: var(--c-green-gl); }
+    .copy-btn:active { transform: scale(0.88); background: var(--c-forest-gl2); transition-duration: 0.08s; }
+    .copy-btn.ok { border-color: var(--c-forest); color: var(--c-forest-lt); background: var(--c-green-gl); animation: checkPop 0.45s var(--spring); }
+    @keyframes checkPop { 0% { transform: scale(1); } 35% { transform: scale(1.22); } 65% { transform: scale(0.93); } 100% { transform: scale(1); } }
 
-    /* ── CV BLOCK ── */
+    /* ─── COPY PARTICLES ─── */
+    .particle {
+      position: fixed; pointer-events: none; z-index: 9990;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--c-forest);
+      animation: particleBurst 0.6s ease-out forwards;
+    }
+    @keyframes particleBurst {
+      0% { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    }
+
+    /* ─── CV BLOCK ─── */
     .cv-card {
       border-radius: var(--r-md); overflow: hidden;
       border: 1px solid var(--c-border2);
@@ -353,15 +371,17 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 13px 16px; background: var(--c-forest-gl2); border-bottom: 1px solid var(--c-border2);
     }
-    .cv-header-left  { font-size: 10px; letter-spacing: 0.16em; color: var(--c-forest); text-transform: uppercase; }
+    .cv-header-left { font-size: 10px; letter-spacing: 0.16em; color: var(--c-forest); text-transform: uppercase; }
     .cv-header-right { font-size: 10px; letter-spacing: 0.12em; color: var(--c-muted); text-transform: uppercase; }
 
     .cv-img-wrap {
       position: relative; overflow: hidden; cursor: zoom-in;
       background: rgba(255,250,240,0.15);
       display: block; width: 100%; border: none; padding: 0; text-align: left;
+      transition: transform 0.18s ease;
     }
-    .cv-image { width: 100%; display: block; object-fit: contain; transition: transform 0.35s var(--ease); }
+    .cv-img-wrap:active { transform: scale(0.99); }
+    .cv-image { width: 100%; display: block; object-fit: contain; transition: transform 0.45s var(--ease), filter 0.3s; transform-origin: center center; }
     .cv-img-wrap:focus-visible { outline: 2px solid var(--c-forest); outline-offset: -2px; }
 
     .cv-zoom-hint {
@@ -374,37 +394,43 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 20px; color: var(--c-forest);
       opacity: 0.85; transform: scale(1);
+      transition: transform 0.3s var(--spring), opacity 0.3s;
     }
+    .cv-img-wrap:hover .cv-zoom-icon { transform: scale(1.15); opacity: 1; }
+    .cv-img-wrap:active .cv-zoom-icon { transform: scale(0.9); transition-duration: 0.1s; }
 
     .cv-footer {
       display: flex; align-items: center; gap: 10px; padding: 14px 16px;
       background: var(--c-glass); border-top: 1px solid var(--c-border);
     }
     .cv-footer-info { flex: 1; min-width: 0; }
-    .cv-filename { font-size: 12px; color: var(--c-ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cv-meta     { font-size: 10px; letter-spacing: 0.08em; color: var(--c-muted); margin-top: 3px; }
+    .cv-meta { font-size: 10px; letter-spacing: 0.08em; color: var(--c-muted); margin-top: 3px; }
 
     .cv-actions { display: flex; gap: 8px; flex-shrink: 0; }
     .btn-cv-action {
       display: inline-flex; align-items: center; gap: 6px; border: 1px solid; border-radius: var(--r-sm);
-      /* min 44px de hauteur */
       padding: 12px 16px; min-height: 44px;
-      font-family: var(--f-mono); font-size: 10px;
-      letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
+      font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
       cursor: pointer; text-decoration: none; white-space: nowrap;
-      transition: all 0.18s ease; -webkit-tap-highlight-color: transparent;
+      transition: all 0.22s var(--spring); -webkit-tap-highlight-color: transparent;
+      position: relative; overflow: hidden;
     }
+    .btn-cv-action:active { transform: scale(0.92); transition-duration: 0.08s; }
+
     .btn-zoom { background: rgba(255,255,255,0.12); border-color: var(--c-border2); color: var(--c-forest); }
-    .btn-zoom:active { background: var(--c-forest-gl); }
+    .btn-zoom:hover::after { left: 160%; transition: left 0.48s ease; }
+    .btn-zoom::after { content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%; background: linear-gradient(105deg, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-18deg); transition: left 0s; }
 
     .btn-dl {
       background: linear-gradient(135deg, var(--c-forest) 0%, #1a3826 100%);
       border-color: var(--c-forest-dk); color: #f0ebe0;
       box-shadow: 0 4px 16px rgba(45,90,61,0.28);
     }
-    .btn-dl:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(45,90,61,0.18); }
+    .btn-dl:hover::after { left: 160%; transition: left 0.5s ease; }
+    .btn-dl::after { content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%; background: linear-gradient(105deg, transparent, rgba(255,250,210,0.32), transparent); transform: skewX(-18deg); transition: left 0s; }
+    .btn-dl:active { box-shadow: 0 2px 8px rgba(45,90,61,0.18); }
 
-    /* ── MODAL ZOOM — toujours bottom-sheet sur mobile ── */
+    /* ─── MODAL ─── */
     #cv-modal {
       position: fixed; inset: 0; z-index: 5000;
       display: flex; align-items: flex-end; padding: 0;
@@ -418,14 +444,12 @@
       backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
     }
     .modal-panel {
-      position: relative; z-index: 1;
-      width: 100%; max-height: 92dvh;
+      position: relative; z-index: 1; width: 100%; max-height: 92dvh;
       display: flex; flex-direction: column;
       background: var(--c-glass-b);
       backdrop-filter: blur(28px) saturate(1.6); -webkit-backdrop-filter: blur(28px) saturate(1.6);
       border: 1px solid var(--c-border2);
-      border-radius: var(--r-lg) var(--r-lg) 0 0;
-      overflow: hidden;
+      border-radius: var(--r-lg) var(--r-lg) 0 0; overflow: hidden;
       box-shadow: 0 -8px 40px rgba(10,18,12,0.22), 0 0 0 1px rgba(255,250,235,0.08) inset;
       transform: translateY(100%); transition: transform 0.42s var(--ease);
     }
@@ -435,13 +459,7 @@
       background: linear-gradient(90deg, transparent, rgba(255,250,235,0.5), transparent);
       z-index: 2; pointer-events: none;
     }
-    /* Drag handle toujours visible */
-    .modal-handle {
-      display: block; width: 40px; height: 4px;
-      background: var(--c-border2); border-radius: 2px;
-      margin: 12px auto 0; flex-shrink: 0;
-    }
-
+    .modal-handle { display: block; width: 40px; height: 4px; background: var(--c-border2); border-radius: 2px; margin: 12px auto 0; flex-shrink: 0; }
     .modal-bar {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 14px 18px; border-bottom: 1px solid var(--c-border);
@@ -450,28 +468,26 @@
     .modal-bar-title { font-size: 10px; letter-spacing: 0.2em; color: var(--c-forest); text-transform: uppercase; }
     .modal-close {
       display: flex; align-items: center; justify-content: center;
-      /* 44×44 zone tactile */
       width: 44px; height: 44px; border-radius: var(--r-sm);
       background: rgba(255,255,255,0.08); border: 1px solid var(--c-border);
-      color: var(--c-muted); font-size: 20px; cursor: pointer; transition: all 0.18s; line-height: 1;
+      color: var(--c-muted); font-size: 20px; cursor: pointer;
+      transition: all 0.22s var(--spring); line-height: 1;
       -webkit-tap-highlight-color: transparent;
     }
-    .modal-close:active { background: var(--c-terra-gl); border-color: rgba(139,48,48,0.4); color: var(--c-terra); }
+    .modal-close:hover { transform: rotate(90deg) scale(1.1); }
+    .modal-close:active { background: var(--c-terra-gl); border-color: rgba(139,48,48,0.4); color: var(--c-terra); transform: rotate(90deg) scale(0.9); transition-duration: 0.08s; }
 
     .modal-img-area {
       flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px;
       background: rgba(26,46,30,0.04); -webkit-overflow-scrolling: touch;
-      /* scroll snap pour faciliter la lecture */
       overscroll-behavior: contain;
     }
     .modal-img-area img {
       display: block; width: 100%; height: auto; border-radius: var(--r-sm);
       border: 1px solid var(--c-border); box-shadow: 0 8px 32px rgba(10,18,12,0.18);
     }
-
     .modal-footer {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      /* safe-area pour les iPhones avec encoche bas */
       padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid var(--c-border);
       background: rgba(255,250,240,0.18); flex-shrink: 0; flex-wrap: wrap;
@@ -483,79 +499,19 @@
       font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
       cursor: pointer; text-decoration: none; border: 1px solid;
       background: var(--c-forest); border-color: var(--c-forest-dk); color: #f0ebe0;
-      box-shadow: 0 3px 12px rgba(45,90,61,0.22); transition: all 0.18s;
+      box-shadow: 0 3px 12px rgba(45,90,61,0.22); transition: all 0.22s var(--spring);
       -webkit-tap-highlight-color: transparent;
     }
-    .modal-btn-fill:active { transform: scale(0.96); }
+    .modal-btn-fill:active { transform: scale(0.93); transition-duration: 0.08s; }
 
-    /* ── FOOTER ── */
+    /* ─── FOOTER ─── */
     .footer { display: flex; justify-content: space-between; align-items: center; padding: 14px 4px 0; }
     .footer-loc { font-size: 10px; color: var(--c-muted); letter-spacing: 0.1em; }
     .footer-loc em { color: var(--c-forest-dk); font-style: normal; }
-    .footer-ver { font-size: 10px; letter-spacing: 0.14em; color: rgba(45,90,61,0.2); text-transform: uppercase; }
+    .footer-ver { font-size: 10px; letter-spacing: 0.14em; color: rgba(45,90,61,0.2); text-transform: uppercase; animation: verBlink 5s ease-in-out infinite; }
+    @keyframes verBlink { 0%,85%,100% { opacity: 1; } 90% { opacity: 0.3; } }
 
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--c-border2); border-radius: 2px; }
-
-    /* ══════════════════════════════════════════
-       MICRO-ANIMATIONS
-    ══════════════════════════════════════════ */
-
-    /* ── NFC TAG : shimmer + lévitation au hover ── */
-    .nfc-tag {
-      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.3s;
-      position: relative; overflow: hidden;
-    }
-    .nfc-tag::before {
-      content: '';
-      position: absolute; top: 0; left: -120%;
-      width: 60%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,250,235,0.55), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .nfc-tag:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(45,90,61,0.14);
-      border-color: rgba(45,90,61,0.38);
-    }
-    .nfc-tag:hover::before {
-      left: 160%; transition: left 0.55s ease;
-    }
-
-    /* ── BADGES : float continu très doux ── */
-    .badge-green { animation: badgeFloat 4.2s ease-in-out infinite; }
-    .badge-terra { animation: badgeFloat 4.2s ease-in-out 0.9s infinite; }
-    @keyframes badgeFloat {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-2.5px); }
-    }
-
-    /* ── LINK ROWS : icône bounce + flèche shoot ── */
-    .link-icon {
-      transition: border-color 0.2s, transform 0.32s var(--ease), background 0.2s;
-    }
-    .link-row:hover .link-icon {
-      border-color: var(--c-forest);
-      transform: scale(1.12) rotate(-4deg);
-      background: rgba(45,90,61,0.10);
-    }
-    .link-row:active .link-icon {
-      transform: scale(0.92) rotate(0deg);
-      transition-duration: 0.1s;
-    }
-
-    /* flèche shoot diagonal */
-    .link-arrow {
-      transition: opacity 0.15s, transform 0.28s var(--ease);
-    }
-    .link-row:hover .link-arrow {
-      opacity: 1;
-      transform: translate(4px, -4px) scale(1.15);
-    }
-
-    /* ── RIPPLE au clic sur link-row et boutons ── */
+    /* ─── RIPPLE ─── */
     .ripple-host { position: relative; overflow: hidden; }
     .ripple {
       position: absolute; border-radius: 50%;
@@ -563,124 +519,44 @@
       transform: scale(0); pointer-events: none;
       animation: rippleAnim 0.52s ease-out forwards;
     }
-    @keyframes rippleAnim {
-      to { transform: scale(4); opacity: 0; }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-indicator {
+      position: fixed; top: 0; left: 0; height: 2px; z-index: 1000;
+      background: linear-gradient(90deg, var(--c-forest), var(--c-terra));
+      transform-origin: left; transform: scaleX(0);
+      transition: transform 0.1s linear;
+      pointer-events: none;
     }
 
-    /* ── IA-BTN : press physique ── */
-    .ia-btn {
-      transition: all 0.18s ease;
-      position: relative; overflow: hidden;
+    /* ─── TOUCH HOLD INDICATOR ─── */
+    .hold-ring {
+      position: absolute; border-radius: 50%;
+      border: 2px solid rgba(45,90,61,0.4);
+      pointer-events: none; z-index: 10;
+      animation: holdExpand 0.6s ease-out forwards;
     }
-    .ia-btn:active {
-      transform: scale(0.84);
-      background: rgba(45,90,61,0.18);
-      transition-duration: 0.08s;
-    }
-
-    /* ── COPY BTN : press + rebond ── */
-    .copy-btn { position: relative; overflow: hidden; }
-    .copy-btn:active {
-      transform: scale(0.90);
-      transition-duration: 0.08s;
-    }
-    /* check pop quand ok */
-    .copy-btn.ok {
-      animation: checkPop 0.4s var(--ease);
-    }
-    @keyframes checkPop {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(1.18); }
-      65%  { transform: scale(0.94); }
-      100% { transform: scale(1); }
+    @keyframes holdExpand {
+      0% { width: 20px; height: 20px; opacity: 0.8; margin-left: -10px; margin-top: -10px; }
+      100% { width: 60px; height: 60px; opacity: 0; margin-left: -30px; margin-top: -30px; }
     }
 
-    /* ── BTN PDF : shimmer doré au hover ── */
-    .btn-dl {
-      position: relative; overflow: hidden;
-    }
-    .btn-dl::after {
-      content: '';
-      position: absolute; top: 0; left: -100%;
-      width: 55%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,250,210,0.32), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .btn-dl:hover::after {
-      left: 160%; transition: left 0.5s ease;
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--c-border2); border-radius: 2px; }
 
-    /* ── BTN ZOOM : shimmer glass ── */
-    .btn-zoom {
-      position: relative; overflow: hidden;
-    }
-    .btn-zoom::after {
-      content: '';
-      position: absolute; top: 0; left: -100%;
-      width: 55%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,255,255,0.3), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .btn-zoom:hover::after {
-      left: 160%; transition: left 0.48s ease;
-    }
-
-    /* ── SECTION TITLE : ligne qui se trace au scroll (via JS IntersectionObserver) ── */
-    .section-title::after {
-      transform-origin: left;
-      transform: scaleX(0);
-      transition: transform 0.6s var(--ease);
-    }
-    .section-title.line-visible::after {
-      transform: scaleX(1);
-    }
-
-    /* ── CV IMG WRAP : parallax interne au hover ── */
-    .cv-img-wrap { will-change: transform; }
-    .cv-image {
-      transition: transform 0.45s var(--ease), filter 0.3s;
-      transform-origin: center center;
-    }
-    /* le parallax est géré en JS pour suivre le curseur */
-
-    /* ── HERO CARD : tilt 3D subtil au pointeur ── */
-    .hero {
-      will-change: transform;
-      transition: box-shadow 0.4s ease;
-    }
-
-    /* ── MODAL : bouton fermer rotation au hover ── */
-    .modal-close {
-      transition: all 0.22s ease;
-    }
-    .modal-close:hover {
-      transform: rotate(90deg) scale(1.1);
-    }
-
-    /* ── FOOTER VER : clignotement discret ── */
-    .footer-ver {
-      animation: verBlink 5s ease-in-out infinite;
-    }
-    @keyframes verBlink {
-      0%,85%,100% { opacity: 1; }
-      90%          { opacity: 0.3; }
-    }
-
-    /* Respect des préférences système */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── SPLASH SCREEN ── -->
+<!-- Progress bar -->
+<div class="scroll-indicator" id="scroll-prog"></div>
+
+<!-- SPLASH -->
 <div id="intro-overlay" aria-hidden="true">
   <div class="intro-card">
     <div class="intro-logo">LB</div>
@@ -689,7 +565,7 @@
   </div>
 </div>
 
-<!-- ── MODAL ZOOM CV ── -->
+<!-- MODAL ZOOM CV -->
 <div id="cv-modal" role="dialog" aria-modal="true" aria-label="Aperçu du CV">
   <div class="modal-backdrop" id="modal-backdrop"></div>
   <div class="modal-panel" id="modal-panel">
@@ -707,20 +583,20 @@
     </div>
     <div class="modal-footer">
       <span class="modal-footer-label">CV · Disponible Mai–Juil 2026</span>
-      <a
-        href="CV Laurent BATTAGLIA.pdf"
-        download="CV_Laurent_Battaglia.pdf"
-        class="modal-btn-fill haptic"
-      >⬇ Télécharger PDF</a>
+      <a href="CV Laurent BATTAGLIA.pdf" download="CV_Laurent_Battaglia.pdf" class="modal-btn-fill haptic">⬇ Télécharger PDF</a>
     </div>
   </div>
 </div>
 
-<!-- ── PAGE ── -->
+<!-- PAGE -->
 <div class="page">
 
   <div class="nfc-tag a1 haptic">
-    <div class="nfc-dot"></div>
+    <div class="nfc-rings">
+      <div class="nfc-ring"></div>
+      <div class="nfc-ring"></div>
+      <div class="nfc-dot"></div>
+    </div>
     <span class="nfc-label">NFC · Carte de contact</span>
   </div>
 
@@ -728,17 +604,15 @@
     <div class="scanline"></div>
     <div class="hero-inner">
       <div class="hero-eyebrow">› <span>ID_CARD</span> · BTS ATI ·</div>
-      <div class="hero-name">Laurent<br><em>Battaglia</em></div>
+      <div class="hero-name" id="hero-name">Laurent<br><em>Battaglia</em></div>
       <div class="hero-divider"></div>
-      <div class="hero-role">
-        <strong>BTS ATI</strong> · Le Havre<br>
-      </div>
+      <div class="hero-role"><strong>BTS ATI</strong> · Le Havre<br></div>
       <div class="badge-row">
-        <span class="badge badge-green">
+        <span class="badge badge-green haptic">
           <span class="nfc-dot" style="width:5px;height:5px;flex-shrink:0;"></span>
           Disponible · Stage Mai–Juil 2026
         </span>
-        <span class="badge badge-terra"> Alternance · Septembre 2027</span>
+        <span class="badge badge-terra haptic">Alternance · Septembre 2027</span>
       </div>
     </div>
   </div>
@@ -765,37 +639,42 @@
 
   <div class="section-title a4">Contact direct</div>
   <div class="link-list a4">
+
+    <!-- EMAIL ROW -->
     <div class="link-row static ripple-host">
       <div class="link-icon">@</div>
       <div class="link-body">
         <div class="link-type">Email</div>
-        <!-- <a> sémantique avec le texte brut pour parsing propre -->
+        <!-- FIX : link-text-contact autorise le retour à la ligne -->
         <a href="mailto:battaglialaurent11@gmail.com" id="email-val"
-           class="link-text" style="text-decoration:none;color:inherit;"
+           class="link-text-contact"
+           style="color:inherit;"
            aria-label="Adresse email : battaglialaurent11@gmail.com">
           battaglialaurent11@gmail.com
         </a>
       </div>
       <div class="inline-actions">
-        <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn haptic" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
+        <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn haptic ripple-host" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
         <button class="copy-btn haptic"
                 aria-live="polite"
                 onclick="copyText('email-val',this)">Copier</button>
       </div>
     </div>
+
+    <!-- PHONE ROW -->
     <div class="link-row static ripple-host">
       <div class="link-icon" style="font-family:var(--f-mono);font-size:11px">#</div>
       <div class="link-body">
         <div class="link-type">Téléphone</div>
-        <!-- <a> sémantique : lisible pour humains, parsable pour machines -->
         <a href="tel:+33621841613" id="tel-val"
-           class="link-text" style="text-decoration:none;color:inherit;"
+           class="link-text-contact"
+           style="color:inherit;"
            aria-label="Téléphone : +33 6 21 84 16 13">
           +33 6 21 84 16 13
         </a>
       </div>
       <div class="inline-actions">
-        <a href="tel:+33621841613" class="ia-btn haptic" title="Appeler" aria-label="Appeler">📞</a>
+        <a href="tel:+33621841613" class="ia-btn haptic ripple-host" title="Appeler" aria-label="Appeler">📞</a>
         <button class="copy-btn haptic"
                 aria-live="polite"
                 onclick="copyText('tel-val',this)">Copier</button>
@@ -809,9 +688,7 @@
       <span class="cv-header-left">▤ CV_Laurent_Battaglia</span>
       <span class="cv-header-right">2026</span>
     </div>
-    <!-- <button> sémantique au lieu de div+role="button" : navigation clavier native -->
-    <button class="cv-img-wrap haptic" onclick="openModal()"
-            aria-label="Agrandir le CV en plein écran">
+    <button class="cv-img-wrap haptic" onclick="openModal()" aria-label="Agrandir le CV en plein écran">
       <img
         class="cv-image"
         src="https://raw.githubusercontent.com/Battaglialaurent/QR/a957b0fec906ec347f5db0f8c0367ec93e60e004/Copie%20de%20Laurent%20BATTAGLIA.jpg"
@@ -828,42 +705,45 @@
       </div>
       <div class="cv-actions">
         <button class="btn-cv-action btn-zoom haptic" onclick="openModal()">⤢ Zoom</button>
-        <a
-          href="CV Laurent BATTAGLIA.pdf"
-          download="CV_Laurent_Battaglia.pdf"
-          class="btn-cv-action btn-dl haptic"
-        >⬇ PDF</a>
+        <a href="CV Laurent BATTAGLIA.pdf" download="CV_Laurent_Battaglia.pdf" class="btn-cv-action btn-dl haptic">⬇ PDF</a>
       </div>
     </div>
   </div>
 
   <div class="footer a7">
     <div class="footer-loc"><em>⌖</em> Le Havre, Normandie — France</div>
-    <div class="footer-ver">Core v3.0 · NFC</div>
+    <div class="footer-ver">Core v3.1 · NFC</div>
   </div>
 
 </div>
 
 <script>
-  /* ── Désactive l'overlay après la fin de toutes les animations ── */
-  window.addEventListener('load', () => {
-    const intro = document.getElementById('intro-overlay');
-    if (!intro) return;
-    setTimeout(() => { intro.style.display = 'none'; }, 2700);
-  });
-
-  /* ── Respect prefers-reduced-motion ── */
   const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Haptique global ── */
+  /* ── Splash ── */
+  window.addEventListener('load', () => {
+    const intro = document.getElementById('intro-overlay');
+    if (intro) setTimeout(() => { intro.style.display = 'none'; }, 2700);
+  });
+
+  /* ── Scroll progress bar ── */
+  const prog = document.getElementById('scroll-prog');
+  if (prog && !noMotion) {
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+      prog.style.transform = `scaleX(${pct})`;
+      prog.style.width = '100%';
+    }, { passive: true });
+  }
+
+  /* ── Haptic ── */
   document.addEventListener('pointerdown', e => {
     const t = e.target.closest('.haptic, a[href], button');
-    if (t && navigator.vibrate) navigator.vibrate(10);
+    if (t && navigator.vibrate) navigator.vibrate(8);
   }, { passive: true });
 
-  /* ══════════════════════════════════════════
-     RIPPLE — sur tous les .ripple-host
-  ══════════════════════════════════════════ */
+  /* ── Ripple ── */
   if (!noMotion) {
     document.querySelectorAll('.ripple-host').forEach(el => {
       el.addEventListener('pointerdown', e => {
@@ -871,113 +751,105 @@
         r.className = 'ripple';
         const rect = el.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height) * 1.4;
-        r.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${e.clientX - rect.left - size/2}px;
-          top:${e.clientY - rect.top - size/2}px;
-        `;
+        r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px;`;
         el.appendChild(r);
         r.addEventListener('animationend', () => r.remove());
       }, { passive: true });
     });
   }
 
-  /* ══════════════════════════════════════════
-     HERO TILT 3D — suit le curseur / touch
-  ══════════════════════════════════════════ */
+  /* ── Link rows : press state via pointer events (fiable sur mobile) ── */
+  document.querySelectorAll('.link-row').forEach(row => {
+    const press  = () => row.classList.add('pressed');
+    const cancel = () => row.classList.remove('pressed');
+    row.addEventListener('pointerdown',  press,  { passive: true });
+    row.addEventListener('pointerup',    cancel, { passive: true });
+    row.addEventListener('pointerleave', cancel, { passive: true });
+    row.addEventListener('pointercancel',cancel, { passive: true });
+  });
+
+  /* ── Hero tilt 3D ── */
   if (!noMotion) {
     const hero = document.querySelector('.hero');
-    let heroRaf = null;
-
-    const applyTilt = (rx, ry) => {
+    let raf = null;
+    const apply = (rx, ry) => {
       hero.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.008)`;
-      hero.style.boxShadow = `
-        ${-ry * 1.2}px ${rx * 1.2}px 32px rgba(45,90,61,0.12),
-        0 2px 8px rgba(26,46,30,0.08)
-      `;
+      hero.style.boxShadow = `${-ry*1.2}px ${rx*1.2}px 32px rgba(45,90,61,0.12), 0 2px 8px rgba(26,46,30,0.08)`;
     };
-
     hero.addEventListener('mousemove', e => {
-      if (heroRaf) cancelAnimationFrame(heroRaf);
-      heroRaf = requestAnimationFrame(() => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
         const r = hero.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width  - 0.5;   // -0.5 → 0.5
-        const y = (e.clientY - r.top)  / r.height - 0.5;
-        applyTilt(y * -6, x * 7);
+        apply((e.clientY - r.top) / r.height * -6 - 0.5, (e.clientX - r.left) / r.width * 7 - 0.5);
       });
     });
-
     hero.addEventListener('mouseleave', () => {
-      if (heroRaf) cancelAnimationFrame(heroRaf);
+      if (raf) cancelAnimationFrame(raf);
       hero.style.transition = 'transform 0.6s var(--ease), box-shadow 0.6s ease';
-      hero.style.transform  = '';
-      hero.style.boxShadow  = '';
+      hero.style.transform = ''; hero.style.boxShadow = '';
       setTimeout(() => { hero.style.transition = ''; }, 620);
     });
-
-    /* Touch tilt */
     hero.addEventListener('touchmove', e => {
-      const t = e.touches[0];
-      const r = hero.getBoundingClientRect();
-      const x = (t.clientX - r.left) / r.width  - 0.5;
-      const y = (t.clientY - r.top)  / r.height - 0.5;
-      applyTilt(y * -4, x * 5);
+      const t = e.touches[0], r = hero.getBoundingClientRect();
+      apply((t.clientY - r.top) / r.height * -4 - 0.5, (t.clientX - r.left) / r.width * 5 - 0.5);
     }, { passive: true });
     hero.addEventListener('touchend', () => {
       hero.style.transition = 'transform 0.5s var(--ease)';
-      hero.style.transform  = '';
+      hero.style.transform = '';
       setTimeout(() => { hero.style.transition = ''; }, 520);
     });
   }
 
-  /* ══════════════════════════════════════════
-     CV IMAGE PARALLAX — suit le curseur dans la vignette
-  ══════════════════════════════════════════ */
+  /* ── Glitch sur hero name (tap / double-tap) ── */
+  const heroName = document.getElementById('hero-name');
+  if (heroName && !noMotion) {
+    let glitchTimer = null;
+    const triggerGlitch = () => {
+      heroName.classList.add('glitching');
+      clearTimeout(glitchTimer);
+      glitchTimer = setTimeout(() => heroName.classList.remove('glitching'), 450);
+    };
+    heroName.addEventListener('click', triggerGlitch);
+    /* auto glitch discret toutes les ~18s */
+    setInterval(triggerGlitch, 18000 + Math.random() * 6000);
+  }
+
+  /* ── CV image parallax ── */
   if (!noMotion) {
     const cvWrap = document.querySelector('.cv-img-wrap');
-    const cvImg  = cvWrap ? cvWrap.querySelector('.cv-image') : null;
-    let cvRaf    = null;
-
+    const cvImg  = cvWrap?.querySelector('.cv-image');
+    let cvRaf = null;
     if (cvWrap && cvImg) {
       cvWrap.addEventListener('mousemove', e => {
         if (cvRaf) cancelAnimationFrame(cvRaf);
         cvRaf = requestAnimationFrame(() => {
           const r = cvWrap.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width  - 0.5;
-          const y = (e.clientY - r.top)  / r.height - 0.5;
-          cvImg.style.transform = `scale(1.04) translate(${x * -8}px, ${y * -5}px)`;
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          cvImg.style.transform = `scale(1.04) translate(${x*-8}px,${y*-5}px)`;
         });
       });
       cvWrap.addEventListener('mouseleave', () => {
         if (cvRaf) cancelAnimationFrame(cvRaf);
         cvImg.style.transition = 'transform 0.55s var(--ease)';
-        cvImg.style.transform  = '';
+        cvImg.style.transform = '';
         setTimeout(() => { cvImg.style.transition = ''; }, 570);
       });
     }
   }
 
-  /* ══════════════════════════════════════════
-     SECTION TITLE LINE DRAW — IntersectionObserver
-  ══════════════════════════════════════════ */
+  /* ── Section title line draw ── */
   const titles = document.querySelectorAll('.section-title');
   if ('IntersectionObserver' in window && !noMotion) {
     const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('line-visible');
-          io.unobserve(e.target);
-        }
-      });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('line-visible'); io.unobserve(e.target); } });
     }, { threshold: 0.6 });
     titles.forEach(t => io.observe(t));
   } else {
     titles.forEach(t => t.classList.add('line-visible'));
   }
 
-  /* ══════════════════════════════════════════
-     MODAL ZOOM
-  ══════════════════════════════════════════ */
+  /* ── Modal ── */
   const modal      = document.getElementById('cv-modal');
   const modalPanel = document.getElementById('modal-panel');
 
@@ -995,7 +867,7 @@
   document.getElementById('modal-backdrop').addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  /* Swipe bas pour fermer sur mobile */
+  /* Swipe bas pour fermer */
   let ty = 0, sw = false;
   modalPanel.addEventListener('touchstart', e => {
     if (modalPanel.scrollTop > 5) return;
@@ -1012,21 +884,41 @@
     if (e.changedTouches[0].clientY - ty > 80) closeModal();
   });
 
-  /* ══════════════════════════════════════════
-     COPIER PRESSE-PAPIER
-  ══════════════════════════════════════════ */
+  /* ── Copy avec particules ── */
+  function spawnParticles(btn) {
+    if (noMotion) return;
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const colors = ['#2d5a3d','#4a8c5c','#8b3030','#1a3826','#d6ccba'];
+    for (let i = 0; i < 8; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const angle = (i / 8) * Math.PI * 2;
+      const dist  = 28 + Math.random() * 22;
+      const tx    = Math.cos(angle) * dist;
+      const ty    = Math.sin(angle) * dist;
+      p.style.cssText = `left:${cx}px;top:${cy}px;--tx:${tx}px;--ty:${ty}px;background:${colors[i%colors.length]};`;
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }
+
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
     const ok = () => {
       const orig = btn.textContent;
-      btn.textContent = '✓ Copié';
+      btn.textContent = '✓';
       btn.classList.add('ok');
+      spawnParticles(btn);
+      if (navigator.vibrate) navigator.vibrate([10, 50, 20]);
       setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2200);
     };
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(ok).catch(() => legacy(text, ok));
     } else { legacy(text, ok); }
   }
+
   function legacy(text, cb) {
     const ta = document.createElement('textarea');
     ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
