@@ -329,20 +329,18 @@
     }
     .link-row:active .link-icon { transform: scale(0.92) rotate(0deg); transition-duration: 0.1s; }
 
-    /* ── FIX EMAIL : link-body + link-text a ── */
     .link-body {
       flex: 1;
       min-width: 0;
-      overflow: hidden; /* ← correctif clé */
+      overflow: hidden;
     }
     .link-type { font-size: 9px; letter-spacing: 0.18em; color: var(--c-muted); text-transform: uppercase; margin-bottom: 4px; }
     .link-text {
       font-size: 13px; color: var(--c-ink);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       transition: color 0.15s;
-      display: block; /* ← correctif */
+      display: block;
     }
-    /* Les <a> à l'intérieur de .link-text héritent du comportement block + ellipsis */
     .link-text a {
       display: block;
       overflow: hidden;
@@ -609,7 +607,7 @@
     </div>
     <div class="modal-img-area">
       <img
-        src=https://raw.githubusercontent.com/Battaglialaurent/QR/fd3f45d962d536939315ac739c27528ac358d3f8/Copie%20de%20Laurent%20BATTAGLIA.jpg
+        src="https://raw.githubusercontent.com/Battaglialaurent/QR/fd3f45d962d536939315ac739c27528ac358d3f8/Copie%20de%20Laurent%20BATTAGLIA.jpg"
         alt="CV Laurent Battaglia — vue agrandie"
         loading="lazy"
       />
@@ -619,7 +617,7 @@
       <a
         href="CV Laurent BATTAGLIA.pdf"
         download="CV_Laurent_Battaglia.pdf"
-        class="modal-btn-fill haptic"
+        class="modal-btn-fill"
       >⬇ Télécharger PDF</a>
     </div>
   </div>
@@ -628,7 +626,7 @@
 <!-- ── PAGE ── -->
 <div class="page">
 
-  <div class="nfc-tag a1 haptic">
+  <div class="nfc-tag a1">
     <div class="nfc-dot"></div>
     <span class="nfc-label">NFC · Carte de contact</span>
   </div>
@@ -654,7 +652,7 @@
 
   <div class="section-title a3">Profils en ligne</div>
   <div class="link-list a3">
-    <a href="https://battaglialaurent.github.io" target="_blank" rel="noopener noreferrer" class="link-row haptic ripple-host">
+    <a href="https://battaglialaurent.github.io" target="_blank" rel="noopener noreferrer" class="link-row ripple-host">
       <div class="link-icon">⬡</div>
       <div class="link-body">
         <div class="link-type">Portfolio</div>
@@ -662,7 +660,7 @@
       </div>
       <span class="link-arrow">↗</span>
     </a>
-    <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369/" target="_blank" rel="noopener noreferrer" class="link-row haptic ripple-host">
+    <a href="https://www.linkedin.com/in/laurent-battaglia-7bb813369/" target="_blank" rel="noopener noreferrer" class="link-row ripple-host">
       <div class="link-icon" style="font-family:var(--f-mono);font-size:11px">in</div>
       <div class="link-body">
         <div class="link-type">LinkedIn</div>
@@ -686,8 +684,8 @@
         </div>
       </div>
       <div class="inline-actions">
-        <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn haptic" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
-        <button class="copy-btn haptic"
+        <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
+        <button class="copy-btn"
                 aria-live="polite"
                 onclick="copyText('email-val',this)">Copier</button>
       </div>
@@ -704,8 +702,8 @@
         </div>
       </div>
       <div class="inline-actions">
-        <a href="tel:+33621841613" class="ia-btn haptic" title="Appeler" aria-label="Appeler">📞</a>
-        <button class="copy-btn haptic"
+        <a href="tel:+33621841613" class="ia-btn" title="Appeler" aria-label="Appeler">📞</a>
+        <button class="copy-btn"
                 aria-live="polite"
                 onclick="copyText('tel-val',this)">Copier</button>
       </div>
@@ -718,11 +716,11 @@
       <span class="cv-header-left">▤ CV_Laurent_Battaglia</span>
       <span class="cv-header-right">2026</span>
     </div>
-    <button class="cv-img-wrap haptic" onclick="openModal()"
+    <button class="cv-img-wrap" onclick="openModal()"
             aria-label="Agrandir le CV en plein écran">
       <img
         class="cv-image"
-        src=https://raw.githubusercontent.com/Battaglialaurent/QR/fd3f45d962d536939315ac739c27528ac358d3f8/Copie%20de%20Laurent%20BATTAGLIA.jpg
+        src="https://raw.githubusercontent.com/Battaglialaurent/QR/fd3f45d962d536939315ac739c27528ac358d3f8/Copie%20de%20Laurent%20BATTAGLIA.jpg"
         alt="CV Laurent Battaglia — cliquer pour agrandir"
         loading="eager"
       />
@@ -735,11 +733,11 @@
         <div class="cv-meta">Mis à jour · 2026</div>
       </div>
       <div class="cv-actions">
-        <button class="btn-cv-action btn-zoom haptic" onclick="openModal()">⤢ Zoom</button>
+        <button class="btn-cv-action btn-zoom" onclick="openModal()">⤢ Zoom</button>
         <a
           href="CV Laurent BATTAGLIA.pdf"
           download="CV_Laurent_Battaglia.pdf"
-          class="btn-cv-action btn-dl haptic"
+          class="btn-cv-action btn-dl"
         >⬇ PDF</a>
       </div>
     </div>
@@ -747,12 +745,126 @@
 
   <div class="footer a7">
     <div class="footer-loc"><em>⌖</em> Le Havre, Normandie — France</div>
-    <div class="footer-ver">Core v3.0 · NFC</div>
+    <div class="footer-ver">Core v3.1 · NFC</div>
   </div>
 
 </div>
 
 <script>
+  /* ─────────────────────────────────────────────
+   * HAPTIC ENGINE — fonctionne sur Android ET iOS
+   * ─────────────────────────────────────────────
+   *
+   * Problème d'origine :
+   *   1. navigator.vibrate() n'existe pas sur iOS Safari (jamais supporté).
+   *   2. Sur Android, déclencher vibrate() dans un listener passif ou via
+   *      délégation peut être bloqué si le geste n'est pas directement lié
+   *      à l'élément touché.
+   *
+   * Solution :
+   *   - Android  → navigator.vibrate(10) directement sur touchstart de l'élément.
+   *   - iOS      → AudioContext avec un oscillateur ultra-court à volume ~0
+   *                (le déclenchement audio crée une micro-impulsion haptique
+   *                 via le Taptic Engine sur iPhone 7+).
+   *                IMPORTANT : l'AudioContext DOIT être créé/résumé dans le
+   *                handler touchstart (geste utilisateur direct), sinon iOS
+   *                bloque l'audio.
+   */
+
+  (function() {
+    const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── Détection plateforme ── */
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const canVibrate = !isIOS && typeof navigator.vibrate === 'function';
+
+    /* ── AudioContext lazy (iOS) ── */
+    let _audioCtx = null;
+    function getAudioCtx() {
+      if (!_audioCtx) {
+        _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (_audioCtx.state === 'suspended') {
+        _audioCtx.resume();
+      }
+      return _audioCtx;
+    }
+
+    /* ── Fonction haptique principale ── */
+    function haptic(style) {
+      // style : 'light' | 'medium' | 'heavy'  (défaut: light)
+      if (noMotion) return;
+
+      /* Android — vibrate API */
+      if (canVibrate) {
+        const pattern = style === 'heavy' ? 18 : style === 'medium' ? 12 : 8;
+        navigator.vibrate(pattern);
+        return;
+      }
+
+      /* iOS — AudioContext Taptic trick */
+      if (!isIOS) return; // desktop : pas de vibration
+      try {
+        const ctx  = getAudioCtx();
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        const dur = style === 'heavy' ? 0.025 : style === 'medium' ? 0.018 : 0.012;
+
+        gain.gain.setValueAtTime(0.00001, now);           // quasi silencieux
+        gain.gain.linearRampToValueAtTime(0.00001, now + dur);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(200, now);
+        osc.start(now);
+        osc.stop(now + dur);
+      } catch(e) { /* silencieux */ }
+    }
+
+    /* ── Attacher haptic à tous les éléments interactifs ── */
+    function attachHaptic(el, style) {
+      el.addEventListener('touchstart', function(e) {
+        haptic(style || 'light');
+      }, { passive: true });
+    }
+
+    /* Sélecteurs cibles */
+    const SELECTORS = [
+      'a[href]',
+      'button',
+      '.link-row',
+      '.ia-btn',
+      '.copy-btn',
+      '.btn-cv-action',
+      '.modal-btn-fill',
+      '.modal-close',
+      '.nfc-tag',
+      '.cv-img-wrap',
+    ];
+
+    function initHaptics() {
+      SELECTORS.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+          attachHaptic(el, 'light');
+        });
+      });
+    }
+
+    /* Lancer après chargement du DOM */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHaptics);
+    } else {
+      initHaptics();
+    }
+
+    /* Exposer pour usage futur (ex: copyText feedback) */
+    window._haptic = haptic;
+  })();
+
+  /* ── SPLASH ── */
   window.addEventListener('load', () => {
     const intro = document.getElementById('intro-overlay');
     if (!intro) return;
@@ -760,11 +872,6 @@
   });
 
   const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  document.addEventListener('pointerdown', e => {
-    const t = e.target.closest('.haptic, a[href], button');
-    if (t && navigator.vibrate) navigator.vibrate(10);
-  }, { passive: true });
 
   /* ── RIPPLE ── */
   if (!noMotion) {
@@ -898,6 +1005,8 @@
   /* ── COPIER ── */
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
+    /* Feedback haptique medium sur la copie */
+    if (window._haptic) window._haptic('medium');
     const ok = () => {
       const orig = btn.textContent;
       btn.textContent = '✓ Copié';
