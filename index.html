@@ -9,7 +9,6 @@
   <link rel="canonical" href="https://battaglialaurent.github.io/" />
   <title>Laurent Battaglia</title>
 
-  <!-- ── Open Graph (WhatsApp, iMessage, LinkedIn, Facebook…) ── -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://battaglialaurent.github.io/" />
   <meta property="og:title"       content="Laurent Battaglia — BTS ATI" />
@@ -20,7 +19,6 @@
   <meta property="og:image:alt"   content="Laurent Battaglia — BTS ATI Le Havre" />
   <meta property="og:locale"      content="fr_FR" />
 
-  <!-- ── Twitter / X card ── -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="Laurent Battaglia — BTS ATI" />
   <meta name="twitter:description" content="Disponible en stage · Mai–Juil 2026 · Le Havre, Normandie" />
@@ -28,7 +26,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Preload critical font subset to avoid FOIT during splash -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
@@ -59,8 +56,6 @@
       --f-mono:    'Space Mono', monospace;
       --r-sm: 6px; --r-md: 12px; --r-lg: 20px;
       --ease: cubic-bezier(0.22,1,0.36,1);
-
-      /* Durée du splash — modifier cette seule valeur pour tout recaler */
       --splash-dur: 2.3s;
     }
 
@@ -106,35 +101,24 @@
       pointer-events: none; z-index: 999; opacity: 0.45;
     }
 
-    /* ─────────────────────────────────────────
-       SPLASH SCREEN
-    ───────────────────────────────────────── */
+    /* ── SPLASH ── */
     #intro-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
+      position: fixed; inset: 0; z-index: 9999;
       background: var(--c-bg-a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       animation: fadeOutOverlay 0.55s ease-in-out 2.05s forwards;
       pointer-events: none;
     }
 
     .intro-card {
-      width: 300px;
-      height: 180px;
+      width: 300px; height: 180px;
       background: var(--c-glass-b);
       backdrop-filter: blur(25px) saturate(1.5);
       -webkit-backdrop-filter: blur(25px) saturate(1.5);
       border: 1px solid var(--c-border2);
       border-radius: var(--r-lg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       box-shadow: 0 40px 80px rgba(26,46,30,0.18), 0 0 0 1px rgba(255,250,235,0.1) inset;
-      perspective: 800px;
       transform: translateY(110vh) rotateX(28deg);
       animation:
         cardEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards,
@@ -142,59 +126,39 @@
     }
 
     .intro-logo {
-      font-family: var(--f-display);
-      font-weight: 300;
-      font-size: 58px;
-      line-height: 1;
-      color: var(--c-forest);
-      letter-spacing: 0.02em;
+      font-family: var(--f-display); font-weight: 300;
+      font-size: 58px; line-height: 1;
+      color: var(--c-forest); letter-spacing: 0.02em;
     }
 
     .intro-line {
-      width: 50px;
-      height: 1px;
+      width: 50px; height: 1px;
       background: var(--c-terra);
       margin: 14px 0 12px;
-      transform: scaleX(0);
-      transform-origin: left center;
+      transform: scaleX(0); transform-origin: left center;
       animation: lineGrow 0.55s cubic-bezier(0.22,1,0.36,1) 0.82s forwards;
     }
 
     .intro-sub {
-      font-family: var(--f-mono);
-      font-size: 8px;
-      letter-spacing: 0.3em;
-      color: var(--c-ink2);
-      text-transform: uppercase;
+      font-family: var(--f-mono); font-size: 8px;
+      letter-spacing: 0.3em; color: var(--c-ink2); text-transform: uppercase;
       opacity: 0;
       animation: subFadeIn 0.5s ease 1.0s forwards;
     }
 
-    @keyframes cardEntrance {
-      to { transform: translateY(0) rotateX(0deg); }
-    }
-
+    @keyframes cardEntrance { to { transform: translateY(0) rotateX(0deg); } }
     @keyframes cardExit {
-      0%   { transform: translateY(0)    scale(1);   opacity: 1; }
+      0%   { transform: translateY(0)      scale(1);    opacity: 1; }
       100% { transform: translateY(-120vh) scale(0.88); opacity: 0; }
     }
-
-    @keyframes fadeOutOverlay {
-      to { opacity: 0; visibility: hidden; pointer-events: none; }
-    }
-
-    @keyframes lineGrow {
-      to { transform: scaleX(1); }
-    }
-
+    @keyframes fadeOutOverlay { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    @keyframes lineGrow  { to { transform: scaleX(1); } }
     @keyframes subFadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ─────────────────────────────────────────
-       PAGE — hidden until splash exits
-    ───────────────────────────────────────── */
+    /* ── PAGE ── */
     .page {
       position: relative; z-index: 1;
       max-width: 440px; margin: 0 auto;
@@ -204,11 +168,7 @@
       animation: fadeInPage 0.7s ease-out 2.2s forwards;
     }
 
-    @keyframes fadeInPage {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
+    @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -230,7 +190,24 @@
       border: 1px solid var(--c-border);
       width: fit-content; margin: 0 auto 4px;
       min-height: 44px;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.3s;
+      position: relative; overflow: hidden;
     }
+    .nfc-tag::before {
+      content: '';
+      position: absolute; top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(255,250,235,0.55), transparent);
+      transform: skewX(-18deg);
+      transition: left 0s;
+    }
+    .nfc-tag:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(45,90,61,0.14);
+      border-color: rgba(45,90,61,0.38);
+    }
+    .nfc-tag:hover::before { left: 160%; transition: left 0.55s ease; }
+
     .nfc-dot {
       width: 7px; height: 7px; border-radius: 50%;
       background: var(--c-forest); box-shadow: 0 0 8px var(--c-forest);
@@ -249,6 +226,8 @@
       backdrop-filter: blur(24px) saturate(1.6); -webkit-backdrop-filter: blur(24px) saturate(1.6);
       border: 1px solid var(--c-border2);
       position: relative; overflow: hidden;
+      will-change: transform;
+      transition: box-shadow 0.4s ease;
     }
     .hero::after {
       content: ''; position: absolute; top: -60px; right: -60px;
@@ -283,8 +262,18 @@
       font-size: 10px; letter-spacing: 0.11em; text-transform: uppercase;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid;
     }
-    .badge-green { background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.35); color: #2d5a3d; }
-    .badge-terra { background: rgba(139,48,48,0.08); border-color: rgba(139,48,48,0.28); color: #8b3030; }
+    .badge-green {
+      background: rgba(45,90,61,0.12); border-color: rgba(45,90,61,0.35); color: #2d5a3d;
+      animation: badgeFloat 4.2s ease-in-out infinite;
+    }
+    .badge-terra {
+      background: rgba(139,48,48,0.08); border-color: rgba(139,48,48,0.28); color: #8b3030;
+      animation: badgeFloat 4.2s ease-in-out 0.9s infinite;
+    }
+    @keyframes badgeFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-2.5px); }
+    }
 
     /* ── SECTION TITLES ── */
     .section-title {
@@ -292,7 +281,13 @@
       font-size: 10px; letter-spacing: 0.22em; color: var(--c-muted); text-transform: uppercase;
       padding: 4px 2px;
     }
-    .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--c-border), transparent); }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--c-border), transparent);
+      transform-origin: left; transform: scaleX(0);
+      transition: transform 0.6s var(--ease);
+    }
+    .section-title.line-visible::after { transform: scaleX(1); }
 
     /* ── LINK LIST ── */
     .link-list {
@@ -302,7 +297,6 @@
     }
     .link-row {
       display: flex; align-items: center; gap: 14px;
-      /* min 56px pour zone tactile confortable */
       padding: 16px 16px; min-height: 56px;
       text-decoration: none; color: var(--c-ink); background: var(--c-glass);
       border-bottom: 1px solid var(--c-border); position: relative;
@@ -315,50 +309,84 @@
       transform: scaleY(0); transform-origin: top;
       transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .link-row:active { background: rgba(45,90,61,0.07); }
+    .link-row:active { background: rgba(45,90,61,0.07); transform: scale(0.985); }
     .link-row:active::after { transform: scaleY(1); }
-    .link-row:active { transform: scale(0.985); }
     .link-row.static:active { transform: none; }
 
     .link-icon {
-      /* 44×44 = taille tactile minimale recommandée */
       width: 44px; height: 44px; border-radius: var(--r-sm);
       background: rgba(255,255,255,0.05); border: 1px solid var(--c-border);
       display: flex; align-items: center; justify-content: center;
       font-size: 17px; flex-shrink: 0; color: var(--c-forest);
       font-family: var(--f-display); font-weight: 300;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, transform 0.32s var(--ease), background 0.2s;
     }
-    .link-body { flex: 1; min-width: 0; }
+    .link-row:hover .link-icon {
+      border-color: var(--c-forest);
+      transform: scale(1.12) rotate(-4deg);
+      background: rgba(45,90,61,0.10);
+    }
+    .link-row:active .link-icon { transform: scale(0.92) rotate(0deg); transition-duration: 0.1s; }
+
+    /* ── FIX EMAIL : link-body + link-text a ── */
+    .link-body {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden; /* ← correctif clé */
+    }
     .link-type { font-size: 9px; letter-spacing: 0.18em; color: var(--c-muted); text-transform: uppercase; margin-bottom: 4px; }
-    .link-text { font-size: 13px; color: var(--c-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.15s; }
-    .link-arrow { color: var(--c-forest); font-size: 17px; flex-shrink: 0; opacity: 0.5; transition: opacity 0.15s, transform 0.15s; }
+    .link-text {
+      font-size: 13px; color: var(--c-ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      transition: color 0.15s;
+      display: block; /* ← correctif */
+    }
+    /* Les <a> à l'intérieur de .link-text héritent du comportement block + ellipsis */
+    .link-text a {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .link-arrow {
+      color: var(--c-forest); font-size: 17px; flex-shrink: 0; opacity: 0.5;
+      transition: opacity 0.15s, transform 0.28s var(--ease);
+    }
+    .link-row:hover .link-arrow { opacity: 1; transform: translate(4px, -4px) scale(1.15); }
 
     .inline-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .ia-btn {
       display: flex; align-items: center; justify-content: center;
-      /* 44×44 zone tactile */
       width: 44px; height: 44px;
       background: rgba(255,255,255,0.06); border: 1px solid var(--c-border);
       border-radius: var(--r-sm); color: var(--c-forest);
       font-size: 18px; cursor: pointer; text-decoration: none;
       transition: all 0.18s ease; flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
+      position: relative; overflow: hidden;
     }
-    .ia-btn:active { transform: scale(0.88); background: rgba(45,90,61,0.18); transition-duration: 0.08s; }
+    .ia-btn:active { transform: scale(0.84); background: rgba(45,90,61,0.18); transition-duration: 0.08s; }
 
     .copy-btn {
       flex-shrink: 0; background: rgba(255,255,255,0.04); border: 1px solid var(--c-border);
       border-radius: var(--r-sm); color: var(--c-muted);
-      /* padding vertical pour atteindre ~44px de hauteur */
-      padding: 12px 13px;
+      padding: 12px 13px; min-height: 44px;
       font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase;
       cursor: pointer; transition: all 0.18s ease; -webkit-tap-highlight-color: transparent;
-      min-height: 44px;
+      position: relative; overflow: hidden;
     }
-    .copy-btn:active { background: var(--c-forest-gl2); }
-    .copy-btn.ok    { border-color: var(--c-forest); color: var(--c-forest-lt); background: var(--c-green-gl); }
+    .copy-btn:active { transform: scale(0.90); transition-duration: 0.08s; }
+    .copy-btn.ok    { border-color: var(--c-forest); color: var(--c-forest-lt); background: var(--c-green-gl); animation: checkPop 0.4s var(--ease); }
+    @keyframes checkPop {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.18); }
+      65%  { transform: scale(0.94); }
+      100% { transform: scale(1); }
+    }
 
     /* ── CV BLOCK ── */
     .cv-card {
@@ -377,10 +405,14 @@
       position: relative; overflow: hidden; cursor: zoom-in;
       background: rgba(255,250,240,0.15);
       display: block; width: 100%; border: none; padding: 0; text-align: left;
+      will-change: transform;
     }
-    .cv-image { width: 100%; display: block; object-fit: contain; transition: transform 0.35s var(--ease); }
     .cv-img-wrap:focus-visible { outline: 2px solid var(--c-forest); outline-offset: -2px; }
-
+    .cv-image {
+      width: 100%; display: block; object-fit: contain;
+      transition: transform 0.45s var(--ease), filter 0.3s;
+      transform-origin: center center;
+    }
     .cv-zoom-hint {
       position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
       background: rgba(26,46,30,0.0); transition: background 0.25s; pointer-events: none;
@@ -404,24 +436,41 @@
     .cv-actions { display: flex; gap: 8px; flex-shrink: 0; }
     .btn-cv-action {
       display: inline-flex; align-items: center; gap: 6px; border: 1px solid; border-radius: var(--r-sm);
-      /* min 44px de hauteur */
       padding: 12px 16px; min-height: 44px;
       font-family: var(--f-mono); font-size: 10px;
       letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
       cursor: pointer; text-decoration: none; white-space: nowrap;
       transition: all 0.18s ease; -webkit-tap-highlight-color: transparent;
     }
-    .btn-zoom { background: rgba(255,255,255,0.12); border-color: var(--c-border2); color: var(--c-forest); }
+    .btn-zoom {
+      background: rgba(255,255,255,0.12); border-color: var(--c-border2); color: var(--c-forest);
+      position: relative; overflow: hidden;
+    }
     .btn-zoom:active { background: var(--c-forest-gl); }
+    .btn-zoom::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 55%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-18deg); transition: left 0s;
+    }
+    .btn-zoom:hover::after { left: 160%; transition: left 0.48s ease; }
 
     .btn-dl {
       background: linear-gradient(135deg, var(--c-forest) 0%, #1a3826 100%);
       border-color: var(--c-forest-dk); color: #f0ebe0;
       box-shadow: 0 4px 16px rgba(45,90,61,0.28);
+      position: relative; overflow: hidden;
     }
     .btn-dl:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(45,90,61,0.18); }
+    .btn-dl::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 55%; height: 100%;
+      background: linear-gradient(105deg, transparent, rgba(255,250,210,0.32), transparent);
+      transform: skewX(-18deg); transition: left 0s;
+    }
+    .btn-dl:hover::after { left: 160%; transition: left 0.5s ease; }
 
-    /* ── MODAL ZOOM — toujours bottom-sheet sur mobile ── */
+    /* ── MODAL ── */
     #cv-modal {
       position: fixed; inset: 0; z-index: 5000;
       display: flex; align-items: flex-end; padding: 0;
@@ -452,13 +501,11 @@
       background: linear-gradient(90deg, transparent, rgba(255,250,235,0.5), transparent);
       z-index: 2; pointer-events: none;
     }
-    /* Drag handle toujours visible */
     .modal-handle {
       display: block; width: 40px; height: 4px;
       background: var(--c-border2); border-radius: 2px;
       margin: 12px auto 0; flex-shrink: 0;
     }
-
     .modal-bar {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 14px 18px; border-bottom: 1px solid var(--c-border);
@@ -467,18 +514,18 @@
     .modal-bar-title { font-size: 10px; letter-spacing: 0.2em; color: var(--c-forest); text-transform: uppercase; }
     .modal-close {
       display: flex; align-items: center; justify-content: center;
-      /* 44×44 zone tactile */
       width: 44px; height: 44px; border-radius: var(--r-sm);
       background: rgba(255,255,255,0.08); border: 1px solid var(--c-border);
-      color: var(--c-muted); font-size: 20px; cursor: pointer; transition: all 0.18s; line-height: 1;
+      color: var(--c-muted); font-size: 20px; cursor: pointer;
+      transition: all 0.22s ease; line-height: 1;
       -webkit-tap-highlight-color: transparent;
     }
+    .modal-close:hover { transform: rotate(90deg) scale(1.1); }
     .modal-close:active { background: var(--c-terra-gl); border-color: rgba(139,48,48,0.4); color: var(--c-terra); }
 
     .modal-img-area {
       flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px;
       background: rgba(26,46,30,0.04); -webkit-overflow-scrolling: touch;
-      /* scroll snap pour faciliter la lecture */
       overscroll-behavior: contain;
     }
     .modal-img-area img {
@@ -488,7 +535,6 @@
 
     .modal-footer {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      /* safe-area pour les iPhones avec encoche bas */
       padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid var(--c-border);
       background: rgba(255,250,240,0.18); flex-shrink: 0; flex-wrap: wrap;
@@ -509,175 +555,8 @@
     .footer { display: flex; justify-content: space-between; align-items: center; padding: 14px 4px 0; }
     .footer-loc { font-size: 10px; color: var(--c-muted); letter-spacing: 0.1em; }
     .footer-loc em { color: var(--c-forest-dk); font-style: normal; }
-    .footer-ver { font-size: 10px; letter-spacing: 0.14em; color: rgba(45,90,61,0.2); text-transform: uppercase; }
-
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--c-border2); border-radius: 2px; }
-
-    /* ══════════════════════════════════════════
-       MICRO-ANIMATIONS
-    ══════════════════════════════════════════ */
-
-    /* ── NFC TAG : shimmer + lévitation au hover ── */
-    .nfc-tag {
-      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.3s;
-      position: relative; overflow: hidden;
-    }
-    .nfc-tag::before {
-      content: '';
-      position: absolute; top: 0; left: -120%;
-      width: 60%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,250,235,0.55), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .nfc-tag:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(45,90,61,0.14);
-      border-color: rgba(45,90,61,0.38);
-    }
-    .nfc-tag:hover::before {
-      left: 160%; transition: left 0.55s ease;
-    }
-
-    /* ── BADGES : float continu très doux ── */
-    .badge-green { animation: badgeFloat 4.2s ease-in-out infinite; }
-    .badge-terra { animation: badgeFloat 4.2s ease-in-out 0.9s infinite; }
-    @keyframes badgeFloat {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-2.5px); }
-    }
-
-    /* ── LINK ROWS : icône bounce + flèche shoot ── */
-    .link-icon {
-      transition: border-color 0.2s, transform 0.32s var(--ease), background 0.2s;
-    }
-    .link-row:hover .link-icon {
-      border-color: var(--c-forest);
-      transform: scale(1.12) rotate(-4deg);
-      background: rgba(45,90,61,0.10);
-    }
-    .link-row:active .link-icon {
-      transform: scale(0.92) rotate(0deg);
-      transition-duration: 0.1s;
-    }
-
-    /* flèche shoot diagonal */
-    .link-arrow {
-      transition: opacity 0.15s, transform 0.28s var(--ease);
-    }
-    .link-row:hover .link-arrow {
-      opacity: 1;
-      transform: translate(4px, -4px) scale(1.15);
-    }
-
-    /* ── RIPPLE au clic sur link-row et boutons ── */
-    .ripple-host { position: relative; overflow: hidden; }
-    .ripple {
-      position: absolute; border-radius: 50%;
-      background: rgba(45,90,61,0.18);
-      transform: scale(0); pointer-events: none;
-      animation: rippleAnim 0.52s ease-out forwards;
-    }
-    @keyframes rippleAnim {
-      to { transform: scale(4); opacity: 0; }
-    }
-
-    /* ── IA-BTN : press physique ── */
-    .ia-btn {
-      transition: all 0.18s ease;
-      position: relative; overflow: hidden;
-    }
-    .ia-btn:active {
-      transform: scale(0.84);
-      background: rgba(45,90,61,0.18);
-      transition-duration: 0.08s;
-    }
-
-    /* ── COPY BTN : press + rebond ── */
-    .copy-btn { position: relative; overflow: hidden; }
-    .copy-btn:active {
-      transform: scale(0.90);
-      transition-duration: 0.08s;
-    }
-    /* check pop quand ok */
-    .copy-btn.ok {
-      animation: checkPop 0.4s var(--ease);
-    }
-    @keyframes checkPop {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(1.18); }
-      65%  { transform: scale(0.94); }
-      100% { transform: scale(1); }
-    }
-
-    /* ── BTN PDF : shimmer doré au hover ── */
-    .btn-dl {
-      position: relative; overflow: hidden;
-    }
-    .btn-dl::after {
-      content: '';
-      position: absolute; top: 0; left: -100%;
-      width: 55%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,250,210,0.32), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .btn-dl:hover::after {
-      left: 160%; transition: left 0.5s ease;
-    }
-
-    /* ── BTN ZOOM : shimmer glass ── */
-    .btn-zoom {
-      position: relative; overflow: hidden;
-    }
-    .btn-zoom::after {
-      content: '';
-      position: absolute; top: 0; left: -100%;
-      width: 55%; height: 100%;
-      background: linear-gradient(105deg, transparent, rgba(255,255,255,0.3), transparent);
-      transform: skewX(-18deg);
-      transition: left 0s;
-    }
-    .btn-zoom:hover::after {
-      left: 160%; transition: left 0.48s ease;
-    }
-
-    /* ── SECTION TITLE : ligne qui se trace au scroll (via JS IntersectionObserver) ── */
-    .section-title::after {
-      transform-origin: left;
-      transform: scaleX(0);
-      transition: transform 0.6s var(--ease);
-    }
-    .section-title.line-visible::after {
-      transform: scaleX(1);
-    }
-
-    /* ── CV IMG WRAP : parallax interne au hover ── */
-    .cv-img-wrap { will-change: transform; }
-    .cv-image {
-      transition: transform 0.45s var(--ease), filter 0.3s;
-      transform-origin: center center;
-    }
-    /* le parallax est géré en JS pour suivre le curseur */
-
-    /* ── HERO CARD : tilt 3D subtil au pointeur ── */
-    .hero {
-      will-change: transform;
-      transition: box-shadow 0.4s ease;
-    }
-
-    /* ── MODAL : bouton fermer rotation au hover ── */
-    .modal-close {
-      transition: all 0.22s ease;
-    }
-    .modal-close:hover {
-      transform: rotate(90deg) scale(1.1);
-    }
-
-    /* ── FOOTER VER : clignotement discret ── */
     .footer-ver {
+      font-size: 10px; letter-spacing: 0.14em; color: rgba(45,90,61,0.2); text-transform: uppercase;
       animation: verBlink 5s ease-in-out infinite;
     }
     @keyframes verBlink {
@@ -685,7 +564,20 @@
       90%          { opacity: 0.3; }
     }
 
-    /* Respect des préférences système */
+    /* ── RIPPLE ── */
+    .ripple-host { position: relative; overflow: hidden; }
+    .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(45,90,61,0.18);
+      transform: scale(0); pointer-events: none;
+      animation: rippleAnim 0.52s ease-out forwards;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--c-border2); border-radius: 2px; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -697,7 +589,7 @@
 </head>
 <body>
 
-<!-- ── SPLASH SCREEN ── -->
+<!-- ── SPLASH ── -->
 <div id="intro-overlay" aria-hidden="true">
   <div class="intro-card">
     <div class="intro-logo">LB</div>
@@ -755,7 +647,7 @@
           <span class="nfc-dot" style="width:5px;height:5px;flex-shrink:0;"></span>
           Disponible · Stage Mai–Juil 2026
         </span>
-        <span class="badge badge-terra"> Alternance · Septembre 2027</span>
+        <span class="badge badge-terra">Alternance · Septembre 2027</span>
       </div>
     </div>
   </div>
@@ -786,12 +678,12 @@
       <div class="link-icon">@</div>
       <div class="link-body">
         <div class="link-type">Email</div>
-        <!-- <a> sémantique avec le texte brut pour parsing propre -->
-        <a href="mailto:battaglialaurent11@gmail.com" id="email-val"
-           class="link-text" style="text-decoration:none;color:inherit;"
-           aria-label="Adresse email : battaglialaurent11@gmail.com">
-          battaglialaurent11@gmail.com
-        </a>
+        <div class="link-text">
+          <a href="mailto:battaglialaurent11@gmail.com" id="email-val"
+             aria-label="Adresse email : battaglialaurent11@gmail.com">
+            battaglialaurent11@gmail.com
+          </a>
+        </div>
       </div>
       <div class="inline-actions">
         <a href="mailto:battaglialaurent11@gmail.com" class="ia-btn haptic" title="Envoyer un email" aria-label="Envoyer un email">✉</a>
@@ -804,12 +696,12 @@
       <div class="link-icon" style="font-family:var(--f-mono);font-size:11px">#</div>
       <div class="link-body">
         <div class="link-type">Téléphone</div>
-        <!-- <a> sémantique : lisible pour humains, parsable pour machines -->
-        <a href="tel:+33621841613" id="tel-val"
-           class="link-text" style="text-decoration:none;color:inherit;"
-           aria-label="Téléphone : +33 6 21 84 16 13">
-          +33 6 21 84 16 13
-        </a>
+        <div class="link-text">
+          <a href="tel:+33621841613" id="tel-val"
+             aria-label="Téléphone : +33 6 21 84 16 13">
+            +33 6 21 84 16 13
+          </a>
+        </div>
       </div>
       <div class="inline-actions">
         <a href="tel:+33621841613" class="ia-btn haptic" title="Appeler" aria-label="Appeler">📞</a>
@@ -826,7 +718,6 @@
       <span class="cv-header-left">▤ CV_Laurent_Battaglia</span>
       <span class="cv-header-right">2026</span>
     </div>
-    <!-- <button> sémantique au lieu de div+role="button" : navigation clavier native -->
     <button class="cv-img-wrap haptic" onclick="openModal()"
             aria-label="Agrandir le CV en plein écran">
       <img
@@ -862,25 +753,20 @@
 </div>
 
 <script>
-  /* ── Désactive l'overlay après la fin de toutes les animations ── */
   window.addEventListener('load', () => {
     const intro = document.getElementById('intro-overlay');
     if (!intro) return;
     setTimeout(() => { intro.style.display = 'none'; }, 2700);
   });
 
-  /* ── Respect prefers-reduced-motion ── */
   const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Haptique global ── */
   document.addEventListener('pointerdown', e => {
     const t = e.target.closest('.haptic, a[href], button');
     if (t && navigator.vibrate) navigator.vibrate(10);
   }, { passive: true });
 
-  /* ══════════════════════════════════════════
-     RIPPLE — sur tous les .ripple-host
-  ══════════════════════════════════════════ */
+  /* ── RIPPLE ── */
   if (!noMotion) {
     document.querySelectorAll('.ripple-host').forEach(el => {
       el.addEventListener('pointerdown', e => {
@@ -899,40 +785,31 @@
     });
   }
 
-  /* ══════════════════════════════════════════
-     HERO TILT 3D — suit le curseur / touch
-  ══════════════════════════════════════════ */
+  /* ── HERO TILT 3D ── */
   if (!noMotion) {
     const hero = document.querySelector('.hero');
     let heroRaf = null;
 
     const applyTilt = (rx, ry) => {
       hero.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.008)`;
-      hero.style.boxShadow = `
-        ${-ry * 1.2}px ${rx * 1.2}px 32px rgba(45,90,61,0.12),
-        0 2px 8px rgba(26,46,30,0.08)
-      `;
+      hero.style.boxShadow = `${-ry * 1.2}px ${rx * 1.2}px 32px rgba(45,90,61,0.12), 0 2px 8px rgba(26,46,30,0.08)`;
     };
 
     hero.addEventListener('mousemove', e => {
       if (heroRaf) cancelAnimationFrame(heroRaf);
       heroRaf = requestAnimationFrame(() => {
         const r = hero.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width  - 0.5;   // -0.5 → 0.5
+        const x = (e.clientX - r.left) / r.width  - 0.5;
         const y = (e.clientY - r.top)  / r.height - 0.5;
         applyTilt(y * -6, x * 7);
       });
     });
-
     hero.addEventListener('mouseleave', () => {
       if (heroRaf) cancelAnimationFrame(heroRaf);
       hero.style.transition = 'transform 0.6s var(--ease), box-shadow 0.6s ease';
-      hero.style.transform  = '';
-      hero.style.boxShadow  = '';
+      hero.style.transform = ''; hero.style.boxShadow = '';
       setTimeout(() => { hero.style.transition = ''; }, 620);
     });
-
-    /* Touch tilt */
     hero.addEventListener('touchmove', e => {
       const t = e.touches[0];
       const r = hero.getBoundingClientRect();
@@ -942,19 +819,16 @@
     }, { passive: true });
     hero.addEventListener('touchend', () => {
       hero.style.transition = 'transform 0.5s var(--ease)';
-      hero.style.transform  = '';
+      hero.style.transform = '';
       setTimeout(() => { hero.style.transition = ''; }, 520);
     });
   }
 
-  /* ══════════════════════════════════════════
-     CV IMAGE PARALLAX — suit le curseur dans la vignette
-  ══════════════════════════════════════════ */
+  /* ── CV PARALLAX ── */
   if (!noMotion) {
     const cvWrap = document.querySelector('.cv-img-wrap');
     const cvImg  = cvWrap ? cvWrap.querySelector('.cv-image') : null;
-    let cvRaf    = null;
-
+    let cvRaf = null;
     if (cvWrap && cvImg) {
       cvWrap.addEventListener('mousemove', e => {
         if (cvRaf) cancelAnimationFrame(cvRaf);
@@ -968,23 +842,18 @@
       cvWrap.addEventListener('mouseleave', () => {
         if (cvRaf) cancelAnimationFrame(cvRaf);
         cvImg.style.transition = 'transform 0.55s var(--ease)';
-        cvImg.style.transform  = '';
+        cvImg.style.transform = '';
         setTimeout(() => { cvImg.style.transition = ''; }, 570);
       });
     }
   }
 
-  /* ══════════════════════════════════════════
-     SECTION TITLE LINE DRAW — IntersectionObserver
-  ══════════════════════════════════════════ */
+  /* ── SECTION TITLE LINE DRAW ── */
   const titles = document.querySelectorAll('.section-title');
   if ('IntersectionObserver' in window && !noMotion) {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('line-visible');
-          io.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('line-visible'); io.unobserve(e.target); }
       });
     }, { threshold: 0.6 });
     titles.forEach(t => io.observe(t));
@@ -992,9 +861,7 @@
     titles.forEach(t => t.classList.add('line-visible'));
   }
 
-  /* ══════════════════════════════════════════
-     MODAL ZOOM
-  ══════════════════════════════════════════ */
+  /* ── MODAL ── */
   const modal      = document.getElementById('cv-modal');
   const modalPanel = document.getElementById('modal-panel');
 
@@ -1012,7 +879,6 @@
   document.getElementById('modal-backdrop').addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  /* Swipe bas pour fermer sur mobile */
   let ty = 0, sw = false;
   modalPanel.addEventListener('touchstart', e => {
     if (modalPanel.scrollTop > 5) return;
@@ -1029,9 +895,7 @@
     if (e.changedTouches[0].clientY - ty > 80) closeModal();
   });
 
-  /* ══════════════════════════════════════════
-     COPIER PRESSE-PAPIER
-  ══════════════════════════════════════════ */
+  /* ── COPIER ── */
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
     const ok = () => {
