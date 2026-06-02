@@ -180,6 +180,7 @@
     .a5 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.48s) var(--ease) forwards; }
     .a6 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.56s) var(--ease) forwards; }
     .a7 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.64s) var(--ease) forwards; }
+    .a8 { opacity:0; animation: fadeUp 0.7s calc(2.30s + 0.72s) var(--ease) forwards; }
 
     /* ── NFC TAG ── */
     .nfc-tag {
@@ -549,6 +550,75 @@
     }
     .modal-btn-fill:active { transform: scale(0.96); }
 
+    /* ── BTS ACCORDION ── */
+    .bts-body { padding: 16px; background: var(--c-glass); }
+
+    .bts-intro {
+      font-size: 10px; letter-spacing: 0.14em; color: var(--c-muted);
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .bts-desc {
+      font-size: 12px; color: var(--c-ink2); line-height: 1.8;
+    }
+
+    .bts-toggle {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 14px; padding: 10px 14px; min-height: 44px;
+      background: rgba(45,90,61,0.07); border: 1px solid var(--c-border2);
+      border-radius: var(--r-sm); color: var(--c-forest);
+      font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; cursor: pointer; width: 100%;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      text-align: left;
+    }
+    .bts-toggle:hover { background: rgba(45,90,61,0.12); border-color: var(--c-border2); }
+    .bts-toggle:active { background: rgba(45,90,61,0.18); transform: scale(0.98); transition-duration: 0.08s; }
+
+    .bts-toggle-icon {
+      display: inline-block;
+      transition: transform 0.32s var(--ease);
+      flex-shrink: 0;
+    }
+
+    .bts-details {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease;
+      opacity: 0;
+    }
+    .bts-details-inner {
+      padding-top: 14px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .bts-sub-title {
+      font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .bts-sub-title.green { color: var(--c-forest); }
+    .bts-sub-title.terra { color: var(--c-terra); }
+
+    .bts-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .bts-tag {
+      font-size: 9px; padding: 5px 11px; border-radius: 20px;
+      background: var(--c-forest-gl2); border: 1px solid var(--c-border);
+      color: var(--c-ink2); letter-spacing: 0.06em;
+      font-family: var(--f-mono);
+    }
+
+    .bts-list {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .bts-list-item {
+      font-size: 11px; color: var(--c-ink2); line-height: 1.55;
+      padding-left: 12px; border-left: 2px solid var(--c-border2);
+    }
+    .bts-list-item.terra-border {
+      border-left-color: rgba(139,48,48,0.32);
+    }
+
     /* ── FOOTER ── */
     .footer { display: flex; justify-content: space-between; align-items: center; padding: 14px 4px 0; }
     .footer-loc { font-size: 10px; color: var(--c-muted); letter-spacing: 0.1em; }
@@ -743,9 +813,90 @@
     </div>
   </div>
 
-  <div class="footer a7">
+  <!-- ── FORMATION BTS ATI ── -->
+  <div class="section-title a6">Formation</div>
+  <div class="cv-card a6">
+    <div class="cv-header">
+      <span class="cv-header-left">▤ BTS_ATI · Présentation</span>
+      <span class="cv-header-right">2 ans</span>
+    </div>
+
+    <div class="bts-body">
+      <div class="bts-intro">Assistance Technique d'Ingénieur</div>
+      <div class="bts-desc">
+        Formation en 2 ans axée sur l'industrie aéronautique, la conception technique et la gestion de projet. Inclut un stage de 8 semaines en entreprise.
+      </div>
+
+      <button
+        class="bts-toggle ripple-host"
+        id="bts-toggle"
+        onclick="toggleBTS()"
+        aria-expanded="false"
+        aria-controls="bts-details"
+      >
+        <span class="bts-toggle-icon" id="bts-toggle-icon">▸</span>
+        <span>Domaines &amp; Capacités</span>
+      </button>
+
+      <div class="bts-details" id="bts-details" role="region" aria-labelledby="bts-toggle">
+        <div class="bts-details-inner">
+
+          <div>
+            <div class="bts-sub-title green">Secteurs d'activité</div>
+            <div class="bts-tags">
+              <span class="bts-tag">Aéronautique</span>
+              <span class="bts-tag">Automobile</span>
+              <span class="bts-tag">Informatique</span>
+              <span class="bts-tag">Électronique</span>
+              <span class="bts-tag">Robotique</span>
+              <span class="bts-tag">R&amp;D Industriel</span>
+              <span class="bts-tag">BTP</span>
+              <span class="bts-tag">Pétrochimie</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="bts-sub-title green">Compétences clés</div>
+            <div class="bts-list">
+              <div class="bts-list-item">Analyser &amp; Concevoir des solutions techniques</div>
+              <div class="bts-list-item">Rédiger des documents techniques clairs</div>
+              <div class="bts-list-item">Organiser &amp; Suivre la production</div>
+              <div class="bts-list-item">Gestion de la qualité &amp; maintenance</div>
+              <div class="bts-list-item">Mettre en œuvre &amp; Encadrer des équipes</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="bts-sub-title terra">Épreuves professionnelles E5</div>
+            <div class="bts-list">
+              <div class="bts-list-item terra-border">U51 · Activité professionnelle en entreprise</div>
+              <div class="bts-list-item terra-border">U52 · Stage 8 semaines + rapport</div>
+              <div class="bts-list-item terra-border">U53 · Mesure &amp; Contrôle industriel</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-footer">
+      <div class="cv-footer-info">
+        <div class="cv-filename">Vue_ensemble_stage_BTS_ATI.pdf</div>
+        <div class="cv-meta">Document officiel · Lycée Jules Siegfried</div>
+      </div>
+      <div class="cv-actions">
+        <a
+          href="Vue_ensemble_stage_BTS_ATI.pdf"
+          download="Vue_ensemble_stage_BTS_ATI.pdf"
+          class="btn-cv-action btn-dl"
+        >⬇ PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer a8">
     <div class="footer-loc"><em>⌖</em> Le Havre, Normandie — France</div>
-    <div class="footer-ver">Core v3.1 · NFC</div>
+    <div class="footer-ver">Core v3.2 · NFC</div>
   </div>
 
 </div>
@@ -754,31 +905,14 @@
   /* ─────────────────────────────────────────────
    * HAPTIC ENGINE — fonctionne sur Android ET iOS
    * ─────────────────────────────────────────────
-   *
-   * Problème d'origine :
-   *   1. navigator.vibrate() n'existe pas sur iOS Safari (jamais supporté).
-   *   2. Sur Android, déclencher vibrate() dans un listener passif ou via
-   *      délégation peut être bloqué si le geste n'est pas directement lié
-   *      à l'élément touché.
-   *
-   * Solution :
-   *   - Android  → navigator.vibrate(10) directement sur touchstart de l'élément.
-   *   - iOS      → AudioContext avec un oscillateur ultra-court à volume ~0
-   *                (le déclenchement audio crée une micro-impulsion haptique
-   *                 via le Taptic Engine sur iPhone 7+).
-   *                IMPORTANT : l'AudioContext DOIT être créé/résumé dans le
-   *                handler touchstart (geste utilisateur direct), sinon iOS
-   *                bloque l'audio.
    */
 
   (function() {
     const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ── Détection plateforme ── */
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const canVibrate = !isIOS && typeof navigator.vibrate === 'function';
 
-    /* ── AudioContext lazy (iOS) ── */
     let _audioCtx = null;
     function getAudioCtx() {
       if (!_audioCtx) {
@@ -790,20 +924,16 @@
       return _audioCtx;
     }
 
-    /* ── Fonction haptique principale ── */
     function haptic(style) {
-      // style : 'light' | 'medium' | 'heavy'  (défaut: light)
       if (noMotion) return;
 
-      /* Android — vibrate API */
       if (canVibrate) {
         const pattern = style === 'heavy' ? 18 : style === 'medium' ? 12 : 8;
         navigator.vibrate(pattern);
         return;
       }
 
-      /* iOS — AudioContext Taptic trick */
-      if (!isIOS) return; // desktop : pas de vibration
+      if (!isIOS) return;
       try {
         const ctx  = getAudioCtx();
         const osc  = ctx.createOscillator();
@@ -814,24 +944,22 @@
         const now = ctx.currentTime;
         const dur = style === 'heavy' ? 0.025 : style === 'medium' ? 0.018 : 0.012;
 
-        gain.gain.setValueAtTime(0.00001, now);           // quasi silencieux
+        gain.gain.setValueAtTime(0.00001, now);
         gain.gain.linearRampToValueAtTime(0.00001, now + dur);
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(200, now);
         osc.start(now);
         osc.stop(now + dur);
-      } catch(e) { /* silencieux */ }
+      } catch(e) {}
     }
 
-    /* ── Attacher haptic à tous les éléments interactifs ── */
     function attachHaptic(el, style) {
-      el.addEventListener('touchstart', function(e) {
+      el.addEventListener('touchstart', function() {
         haptic(style || 'light');
       }, { passive: true });
     }
 
-    /* Sélecteurs cibles */
     const SELECTORS = [
       'a[href]',
       'button',
@@ -843,6 +971,7 @@
       '.modal-close',
       '.nfc-tag',
       '.cv-img-wrap',
+      '.bts-toggle',
     ];
 
     function initHaptics() {
@@ -853,14 +982,12 @@
       });
     }
 
-    /* Lancer après chargement du DOM */
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initHaptics);
     } else {
       initHaptics();
     }
 
-    /* Exposer pour usage futur (ex: copyText feedback) */
     window._haptic = haptic;
   })();
 
@@ -1002,10 +1129,29 @@
     if (e.changedTouches[0].clientY - ty > 80) closeModal();
   });
 
+  /* ── BTS ACCORDION ── */
+  function toggleBTS() {
+    const details = document.getElementById('bts-details');
+    const icon    = document.getElementById('bts-toggle-icon');
+    const btn     = document.getElementById('bts-toggle');
+    const isOpen  = details.style.maxHeight && details.style.maxHeight !== '0px';
+
+    if (isOpen) {
+      details.style.maxHeight = '0';
+      details.style.opacity   = '0';
+      icon.style.transform    = 'rotate(0deg)';
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      details.style.maxHeight = details.scrollHeight + 'px';
+      details.style.opacity   = '1';
+      icon.style.transform    = 'rotate(90deg)';
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
   /* ── COPIER ── */
   function copyText(id, btn) {
     const text = document.getElementById(id).textContent.trim();
-    /* Feedback haptique medium sur la copie */
     if (window._haptic) window._haptic('medium');
     const ok = () => {
       const orig = btn.textContent;
